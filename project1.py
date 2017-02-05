@@ -26,16 +26,20 @@ def intro_page():
 
 
     """
-    intro = raw_input("What would you like to do?\n1 - Instructions\n2 - Start playing\n3 - Quit\n")
-
+    while True:
+        intro = raw_input("What would you like to do?\n1 - Instructions\n2 - Start playing\n3 - Quit\n")
+        if intro == "1" or intro == "2" or intro == "3":
+            break
+        else:
+            print "I don't understand. Please choose 1, 2, or 3."
     if intro == "1":
         print intro #instructions go here
         # Instructions: background on whale migration; you are female whale traveling north
-# with your calf
+        # with your calf
     elif intro == "2":
         print "Let's play!"
         #run names function here
-    else:
+    elif intro == "3":
         print "Thank you!"
         exit()
 
@@ -43,7 +47,7 @@ def intro_page():
 def main():
     intro_page()
 
-if "__name__" == main():
+if __name__ == '__main__':
     main()
 
 
