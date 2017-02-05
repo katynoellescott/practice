@@ -1,4 +1,4 @@
-#Title page with whale image and opening player choices (direction, play, quit)
+#Title page with whale image and opening player choices (directions, play, quit)
 def intro_page():
     print "\n" * 80
     print """
@@ -14,7 +14,7 @@ def intro_page():
                                       ;;
                                       ;'
                         :._   _.------------.___
-                __      :__:-'                  '--.          .
+                __      :__:-'                  '--.           .
          __   ,' .'    .'             ______________'.        ":"
        /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       ___:____     |"\/"|
           '._                     .-': .' _.' _.'_.'      ,'        `.    \  /
@@ -37,13 +37,76 @@ def intro_page():
         # Instructions: background on whale migration; you are female whale traveling north
         # with your calf
     elif intro == "2":
-        print "Let's play!"
-        #run names function here
-    elif intro == "3":
-        print "Thank you!"
+        print "Get ready for a WHALE of a good time!"
+        names() #run names function to begin play
+    else:
+        print "Come back soon!"
         exit()
 
 
+#function to collect names of player and other members of whale pod
+def names():
+    print "\n" * 80
+    print """
+    You're a humpback whale traveling from the equator back to the arctic, after
+    giving birth your calf. You'll be traveling with your calf, a friend, and her
+    calf.
+
+    """
+    print """
+
+                            ','. '. ; : ,','
+                              '..'.,',..'
+                                 ';.'  ,'
+                                  ;;
+                                  ;'
+                    :._   _.------------.___
+            __      :__:-'                  '--.      
+     __   ,' .'    .'             ______________'.      
+   /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
+      '._                     .-': .' _.' _.'_.'      
+         '----'._____________.'_'._:_:_.-'--'         
+  ~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~ 
+  """
+    player = raw_input("Your name: ")
+    print """
+       .
+      ":"
+    ___:____     |"\/"|
+  ,'        `.    \  /
+  |  O        \___/  |
+~^~^~^~^~^~^~^~^~^~^~^~^~
+"""
+    calf = raw_input("Your calf's name: ")
+    print """
+
+                            ','. '. ; : ,','
+                              '..'.,',..'
+                                 ';.'  ,'
+                                  ;;
+                                  ;'
+                    :._   _.------------.___
+            __      :__:-'                  '--.      
+     __   ,' .'    .'             ______________'.      
+   /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
+      '._                     .-': .' _.' _.'_.'      
+         '----'._____________.'_'._:_:_.-'--'         
+  ~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~ 
+  """
+    friend = raw_input("Your friend's name: ")
+    print """
+       .
+      ":"
+    ___:____     |"\/"|
+  ,'        `.    \  /
+  |  O        \___/  |
+~^~^~^~^~^~^~^~^~^~^~^~^~
+"""
+    friend_calf = raw_input("Your friend's calf's name: ")
+    #how do I pass these variable to other functions?
+
+
+#main function
 def main():
     intro_page()
 
@@ -123,12 +186,12 @@ if __name__ == '__main__':
   #                                 ;;
   #                                 ;'
   #                   :._   _.------------.___
-  #           __      :__:-'                  '--.          .
-  #    __   ,' .'    .'             ______________'.        ":"
-  #  /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       ___:____     |"\/"|
-  #     '._                     .-': .' _.' _.'_.'      ,'        `.    \  /
-  #        '----'._____________.'_'._:_:_.-'--'         |  O        \___/  |
-  #~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~
+  #           __      :__:-'                  '--.      
+  #    __   ,' .'    .'             ______________'.      
+  #  /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
+  #     '._                     .-': .' _.' _.'_.'      
+  #        '----'._____________.'_'._:_:_.-'--'         
+  #~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~ 
 
 
 
