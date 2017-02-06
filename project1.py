@@ -38,13 +38,15 @@ def intro_page():
         # with your calf
     elif intro == "2":
         print "Get ready for a WHALE of a good time!"
+        #insert a pause
         names() #run names function to begin play
     else:
         print "Come back soon!"
         exit()
 
 
-#function to collect names of player and other members of whale pod
+#function to collect names of player and other members of whale pod, names will 
+#be global variables used throughout rest of game
 def names():
     print "\n" * 80
     print """
@@ -68,6 +70,7 @@ def names():
          '----'._____________.'_'._:_:_.-'--'         
   ~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~ 
   """
+    global player 
     player = raw_input("Your name: ")
     print """
        .
@@ -77,6 +80,7 @@ def names():
   |  O        \___/  |
 ~^~^~^~^~^~^~^~^~^~^~^~^~
 """
+    global calf
     calf = raw_input("Your calf's name: ")
     print """
 
@@ -93,6 +97,7 @@ def names():
          '----'._____________.'_'._:_:_.-'--'         
   ~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~ 
   """
+    global friend
     friend = raw_input("Your friend's name: ")
     print """
        .
@@ -102,13 +107,42 @@ def names():
   |  O        \___/  |
 ~^~^~^~^~^~^~^~^~^~^~^~^~
 """
+    global friend_calf
     friend_calf = raw_input("Your friend's calf's name: ")
-    #how do I pass these variable to other functions?
+    #how do I pass these variables to other functions?
+    #do i need to write a separate function for each name, to pass the variable along with "return"?
+    prepare()
+
+
+
+#PREPARE FUNCTION
+# raw_input for how long to stay and eat and rest, to build up fat store for journey
+# and to ensure calf is ready for journey
+#function to translate this into an integer
+#function uses this integer as one input to determine health throughout journey
+def prepare():
+    print "\n" * 80
+    print """
+
+    You need to build up your fat stores before you leave on your long journey.
+    You also need to be sure %s is ready for such a grueling trip. You
+    will need to spend some time eating krill and small fish and resting up.
+
+<o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  <o)))><
+      <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  
+<o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  <o)))><
+
+    However, you don't want to leave too late, or xxxxx.
+
+    """ % calf
+    departure = raw_input("When would you like to leave?\n1 - xxxxx\n2 - xxxxx\n3 - xxxxxx\n")
+    #need to add details, based on real stats
 
 
 #main function
 def main():
     intro_page()
+
 
 if __name__ == '__main__':
     main()
@@ -116,20 +150,9 @@ if __name__ == '__main__':
 
 #VISUALS
 #whale traveling through waters at top of every page
-#health, speed, hunger displayed on each page
+#health, speed, hunger (weight?) displayed on each page
 #page changes with every input option
 #for new page, clear terminal with print "\n" * 80
-
-#NAMES FUNCTION
-# raw_input("") to enter your name, name of calf, name of friend and name of
-# friend's calf
-#after names, run prepare function
-
-#PREPARE FUNCTION
-# raw_input for how long to stay and eat and rest, to build up fat store for journey
-# and to ensure calf is ready for journey
-#function to translate this into an integer
-#function uses this integer as one input to determine health throughout journey
 
 #CONSTANT TRAVELING OPTIONS
 #function with while loop to return to traveling option page at any time
@@ -144,7 +167,7 @@ if __name__ == '__main__':
 #communicate with other whales
 
 #HEALTH function
-#health increase with more food
+#health increase with more food (baby whales gain 200 pounds per day)
 #health decreases with less food, plastic gyre, fights with orcas, whalers
 #health decreases with fast pace
 #health increases with communication with other whales, joining other pods
@@ -195,7 +218,7 @@ if __name__ == '__main__':
 
 
 
-# orca visuals:
+# orca (bad guy) visuals:
 
 #     ~                           ~              ~
 #        ~~~~     ~          ~~ ~        ~      ~    ~~    
