@@ -51,8 +51,8 @@ def names():
     print "\n" * 80
     print """
     You're a humpback whale traveling from the equator back to the arctic, after
-    giving birth your calf. You'll be traveling with your calf, a friend, and her
-    calf.
+    giving birth your calf in September. You'll be traveling in a pod consisting 
+    of you, your calf, and two male family members.
 
     """
     print """
@@ -67,8 +67,7 @@ def names():
      __   ,' .'    .'             ______________'.      
    /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
       '._                     .-': .' _.' _.'_.'      
-         '----'._____________.'_'._:_:_.-'--'         
-  ~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~ 
+  ~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~     
   """
     global player 
     player = raw_input("Your name: ")
@@ -94,23 +93,26 @@ def names():
      __   ,' .'    .'             ______________'.      
    /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
       '._                     .-': .' _.' _.'_.'      
-         '----'._____________.'_'._:_:_.-'--'         
-  ~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~ 
+  ~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~
   """
-    global friend
-    friend = raw_input("Your friend's name: ")
+    global family1
+    family1 = raw_input("Your first family member's name: ")
     print """
-       .
-      ":"
-    ___:____     |"\/"|
-  ,'        `.    \  /
-  |  O        \___/  |
-~^~^~^~^~^~^~^~^~^~^~^~^~
-"""
-    global friend_calf
-    friend_calf = raw_input("Your friend's calf's name: ")
-    #how do I pass these variables to other functions?
-    #do i need to write a separate function for each name, to pass the variable along with "return"?
+
+                            ','. '. ; : ,','
+                              '..'.,',..'
+                                 ';.'  ,'
+                                  ;;
+                                  ;'
+                    :._   _.------------.___
+            __      :__:-'                  '--.      
+     __   ,' .'    .'             ______________'.      
+   /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
+      '._                     .-': .' _.' _.'_.'      
+  ~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~
+  """
+    global family2
+    family2 = raw_input("Your second family member's name: ")
     prepare()
 
 
@@ -118,30 +120,68 @@ def names():
 #PREPARE FUNCTION
 # raw_input for how long to stay and eat and rest, to build up fat store for journey
 # and to ensure calf is ready for journey
-#function to translate this into an integer
-#function uses this integer as one input to determine health throughout journey
 def prepare():
     print "\n" * 80
     print """
 
-    You need to build up your fat stores before you leave on your long journey.
-    You also need to be sure %s is ready for such a grueling trip. You
-    will need to spend some time eating krill and small fish and resting up.
+    You and your pod are migrating north, to abundant feeding grounds. You have
+    spent the winter in the warm waters near Hawaii. These waters don't have much
+    food, so you have been fasting and living off of your fat stores since you
+    left Alaska several months ago.
 
-<o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  <o)))><
+    <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  <o)))><
       <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  
-<o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  <o)))><
+    <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  <o)))><
 
-    However, you don't want to leave too late, or xxxxx.
+    Before you leave, you need to be sure %s is ready for such a grueling trip. 
+    You will need to spend some time weaning and training %s to dive. You'll also
+    need to rest up to prepare for your migration.
 
-    """ % calf
-    departure = raw_input("When would you like to leave?\n1 - xxxxx\n2 - xxxxx\n3 - xxxxxx\n")
-    #need to add details, based on real stats
+    However, you don't want to leave too late, or you won't have enough fat stores
+    to make your long journey.
+
+    """ % (calf, calf)
+
+    #prompt user to declare a month to begin journey, validate choice, assign choice
+    #a health impact, with March being ideal
+    while True:
+        departure = raw_input("When would you like to leave?\n1 - February\n2 - March\n3 - April\n4 - May\n")
+        if departure == "1" or departure == "2" or departure == "3" or departure == "4":
+            break
+        else:
+            print "I don't understand. Please choose 1, 2, 3, or 4."
+    if departure == "1":
+        return -2
+    elif departure == "2":
+        return 5
+    elif departure == "3":
+        return -2
+    else:
+        return -5
+
+
+
+#CONSTANT TRAVELING OPTIONS
+#function with while loop to return to traveling option page at any time
+# raw_input for how fast to travel -- whales can travel up to 5 mph, but average
+#1mph on journey, can travel up to 100 miles per day bc travel 24 hours
+#research: http://www.nmfs.noaa.gov/pr/species/mammals/whales/humpback-whale.html
+
+
+
+
+def health():
+    departure_health = prepare()
+
+    #need to create algorithm to calculate health from combination of inputs
+    print "Health:", departure_health
 
 
 #main function
 def main():
     intro_page()
+    health()
+    
 
 
 if __name__ == '__main__':
@@ -154,10 +194,6 @@ if __name__ == '__main__':
 #page changes with every input option
 #for new page, clear terminal with print "\n" * 80
 
-#CONSTANT TRAVELING OPTIONS
-#function with while loop to return to traveling option page at any time
-# raw_input for how fast to travel -- whales travel 3-5 mph, but travel 100 miles
-# per day bc travel 24 hours
 
 #INTERMITTENT TRAVELING OPTIONS
 #route choices at key points, based on location, based on speed and time passed
@@ -176,6 +212,11 @@ if __name__ == '__main__':
 #function to determine which hazards happen when -- based on traveling options
 #hazards include plastic gyre, killer whales, weather, whalers, starving and
 #illness
+# entanglement in fishing gear (bycatch)
+# ship strikes
+# whale watch harassment
+# habitat impacts
+# harvest
 
 #GOAL
 #make it to northern feeding grounds
