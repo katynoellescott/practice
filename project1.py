@@ -1,4 +1,3 @@
-
 #function for all input, which will allow user to use universal commands like
 #'exit' and 'help'
 def user_input():
@@ -9,7 +8,7 @@ def user_input():
         elif input.lower() == 'help':
             intructions()
         elif input.lower() == 'migrate':
-            migration()
+            migrate()
         else:
             return input
 
@@ -19,8 +18,11 @@ def instructions():
     #add more to these instructions, including following prompts to type in answers
     # Instructions: background on whale migration; you are female whale traveling north
     # with your calf; add info about migration speed here or in migrate function???
+    # make it to northern feeding grounds and win, but need to avoide hazards on route
     print "\n" * 80
     print """
+
+    INTSTRUCTIONS GO HERE
 
     To change your migration options, type "migrate" at any time.
 
@@ -217,6 +219,7 @@ def prepare():
 # raw_input for how fast to travel -- whales can travel up to 5 mph, but average
 #1mph on journey, can travel up to 100 miles per day bc travel 24 hours
 #research: http://www.nmfs.noaa.gov/pr/species/mammals/whales/humpback-whale.html
+#how can player return to game if exit game to reset migration speed?
 def migrate():
     print "Type 'migrate' to return to this page and change your choices at any time."
     while True:
@@ -266,6 +269,13 @@ def calculate_health():
     #decide on threshholds for "poor," "fair" and "good", as well as what leads to death
     print "Health:", departure_health + speed_health
 
+    #health increases with more food (baby whales gain 200 pounds per day)
+    #health decreases with less food, plastic gyre, fights with orcas, whalers
+    #health decreases with fast pace
+    #health increases with communication with other whales, joining other pods
+    #does each whale need a health calculator, or one for the whole pod and then
+    #randomly select who gets ill, with player being less likely?
+
 
 #main function
 def main():
@@ -292,11 +302,7 @@ if __name__ == '__main__':
 #join other pods
 #communicate with other whales
 
-#HEALTH function
-#health increase with more food (baby whales gain 200 pounds per day)
-#health decreases with less food, plastic gyre, fights with orcas, whalers
-#health decreases with fast pace
-#health increases with communication with other whales, joining other pods
+
 
 #HAZARDS
 #function to determine which hazards happen when -- based on traveling options
@@ -308,8 +314,8 @@ if __name__ == '__main__':
 # habitat impacts
 # harvest
 
-#GOAL
-#make it to northern feeding grounds
+#WIN
+#make it to northern feeding grounds and win
 
 #VISUALS
 #fish visuals: 
