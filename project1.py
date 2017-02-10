@@ -2,17 +2,17 @@
 #'exit' and 'help'
 def user_input():
     while True:
-        input = raw_input("")
-        if input.lower() == 'exit': 
+        user_choice = raw_input("")
+        if user_choice.lower() == 'exit': 
           exit()
-        elif input.lower() == 'help':
+        elif user_choice.lower() == 'help':
           intructions()
-        elif input.lower() == 'migrate':
+        elif user_choice.lower() == 'migrate':
           migrate()
-        elif input == "":
+        elif user_choice == "":
          print "Please type your option."
         else:
-          return input
+          return user_choice
 
 
 #function to display instructions for play
@@ -112,8 +112,8 @@ def intro_game():
         exit()
 
 
-# collect names of player and other members of whale pod; names defined as 
-# global variables b/c used throughout multiple functions and don't change
+# NAMES FUNCTION: input names of player and other members of whale pod; 
+# names defined as global variables b/c used throughout multiple functions and don't change
 def input_names():
     print "\n" * 80
     print """
@@ -184,7 +184,6 @@ def input_names():
     print "Your second family member's name: "
     global family2
     family2 = user_input()
-    #does prepare() need to be called here or in main code???
 
 
 
@@ -237,11 +236,8 @@ def prepare():
 
 
 
-#CONSTANT TRAVELING OPTIONS
-# raw_input for how fast to travel -- whales can travel up to 5 mph, but average
-#1mph on journey, can travel up to 100 miles per day bc travel 24 hours
-#research: http://www.nmfs.noaa.gov/pr/species/mammals/whales/humpback-whale.html
-#how can player return to game if exit game to reset migration speed?
+# MIGRATE FUNCTION: input migration speed; can return and change this option
+# at any time 
 def migrate():
     print "\n" * 80
     print "Type 'migrate' to return to this page and change your choice at any time."
@@ -283,9 +279,14 @@ def migrate():
 def play_game():
   departure_health = prepare()
   speed_health = migrate()
-  while True: #how do I break this loop? It should only break if you die or win...
+  migration_health = 0
+  while True: #WARNING: CURRENTLY INFINITE LOOP!
+  #loop will only break if you die or win or EXIT()
+  #use two (or nested) if statements, where first one checks location and health
+  #and breaks before moving on to second if statement
     import random
     random_event = random.randrange(20)
+    print "\n" * 80
     print """
 
 
@@ -293,44 +294,40 @@ Image of whales migrating
 
   """
     if random_event == 0:
-      boat_hazard()#will this break the loop bc it sends it to a function with a return?
+      migration_health = migration_health + boat_hazard()#will this break the loop bc it sends it to a function with a return?
     # elif random_event == 2:
-    #   #insert event function
+    #   migration_health = migration_health + orca_hazard()
     # elif random_event == 4:
-    #   #insert event function
+    #   migration_health = migration_health + entanglement_hazard()
     # elif random_event == 6:
-    #   #insert event function
+    #   migration_health = migration_health + gyre_hazard()
     # elif random_event == 8:
-    #   #insert event function
+    #   migration_health = migration_health + weather_choice()
+    # elif random_event == 10:
+    #   migration_health = migration_health + feed_choice()
+    # elif random_event == 12:
+    #   migration_health = migration_health + communicate_choice()
     else:
-      print "Health:", calculate_health(departure_health, speed_health)
+      print "Day: " #, calculate_date()
+      print "Health:", calculate_health(departure_health, speed_health, migration_health)
       print "Location:" #, calculate_location()
       import time #how do I not repeat imports???
       time.sleep(3) #these two lines of code insert a 3-second pause
 
 
-
-
-#INTERMITTENT TRAVELING OPTIONS
-#route choices at key points, based on location, based on speed and time passed
-#weather choices -- random
-#stop to eat
-#join other pods
-#communicate with other whales
-
-
-
-#HAZARDS
-#function to determine which hazards happen when -- based on traveling options
-#hazards include plastic gyre, killer whales, weather, whalers, starving and
-#illness
-# entanglement in fishing gear (bycatch)
-# ship strikes
-# whale watch harassment
+# OTHER POSSIBLE HAZARDS/CHOICES
+# route choices at key points, based on location, based on speed and time passed
+# whalers/harvest
+# starving and illness
 # habitat impacts
-# harvest
 
-
+#FUNCTIONS FOR VARIOUS CHOICES/HAZARDS:
+#def orca_hazard()
+#def entanglement_hazard()
+#def gyre_hazard()
+#def weather_choice()
+#def feed_choice()
+#def communicate_choice()
 
 def boat_hazard():
   import random
@@ -385,15 +382,20 @@ def boat_hazard():
 # combined with hazards/choices
 
 
+# function to calculate date
+# def calculate_date(): need agorithm based on time within game
+# combined with prepare return and hazards/choices 
+
+
 #function to calculate health, based on speed and hazards
-def calculate_health(departure, speed):
+def calculate_health(departure, speed, migration):
     #need to repeatedly recalculate this, based on changing user input... use while loop?
     #how do I recalculate without re-running functions that the user doesn't want? Maybe
     #two functions are needed -- one to call functions, based on game order and user choices.
     #a second function to calculate health based on passed variables
 
 #need to modify algorithm -- this is just for testing
-    health = 5 + departure + speed
+    health = 5 + departure + speed + migration
 
 #need to add threshold for death
     if health <= -5:
@@ -409,21 +411,22 @@ def calculate_health(departure, speed):
 
     return health_return
 
-    #health increases with more food (baby whales gain 200 pounds per day)
-    #health decreases with less food, plastic gyre, fights with orcas, whalers
-    #health decreases with fast pace
-    #health increases with communication with other whales, joining other pods
     #does each whale need a health calculator, or one for the whole pod and then
-    #randomly select who gets ill, with player being less likely? OR do I need to have
-    #a health function for EACH member of the pod??? Maybe do this if making it more complex
+    #randomly select who gets ill, with player being less likely? (Could start with
+    # universal pod health, and change to one per whale if there's time)
 
 
 #WIN SCREEN
-#make it to northern feeding grounds and win --> based on location function?
+# make it to northern feeding grounds and win --> based on location function?
+# def win():
+# if statement
+#   print exciting win statement
 
 #DEATH SCREEN
 #health drops too low and you die --> based on health function?
-
+# def death():
+# if statement
+#   print sad death statement
 
 #main function
 def main(): 
@@ -436,16 +439,12 @@ if __name__ == '__main__':
     main()
 
 
+
 #VISUALS
 #whale traveling through waters at top of every page
-#health, speed, hunger (weight?) displayed on each page
-#page changes with every input option
 #for new page, clear terminal with print "\n" * 80
 
 
-
-
-#VISUALS
 #fish visuals: 
 # <o)))><
 
