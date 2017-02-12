@@ -1,6 +1,7 @@
 # WHALE TRAIL, A CHOOSE YOUR OWN ADVENTURE GAME BY KATY SCOTT
 import random
 import time
+from datetime import datetime, timedelta
 
 # Assign game start time, so elapsed time can be used to calculate the date of the journey in the calculate_date() function
 # is this an appropriate use of a global variable, or is there a better way?
@@ -38,25 +39,26 @@ def instructions():
     Welcome to Whale Trail, the game where YOU are a migrating humpback whale,
     making life and death decisions for yourself and your pod.
 
-    Humpback whales migrate from Alaska to Hawaii each winter, in one of the longest
-    migrations of any mammal on Earth. This where the whales breed and, about 11 
-    months later, return to give birth in the warm waters. In this game, you have 
-    just given birth to your calf near Hawaii. Now, after months of fasting, you 
-    are about to make the 3,000-mile journey back to the abundant feeding grounds 
-    near Alaska.
+    Humpback whales migrate from Alaska to Mexico each winter, in one of the longest
+    migrations of any mammal on Earth. In the warm waters of Mexico, the whales breed 
+    and, about 11 months later, return to give birth. Although these waters have less 
+    food, they also have fewer predators, making them safer for newborn calves. 
 
-    On your journey, you'll need to find food, protect your pod and avoid hazards
-    like weather, ocean pollution, boats, and killer whales.
+    In this game, you have just given birth to your calf near Mexico. Now, after 
+    months of fasting, you are about to make the 6,000-mile journey back to the 
+    abundant feeding grounds near Alaska. On your journey, you'll need to find food, 
+    protect your pod and avoid hazards like weather, ocean pollution, boats, and 
+    killer whales.
 
-    To play, follow the prompts on each screen to make your next decision. The health
+    TO PLAY: follow the prompts on each screen to make your next decision. The health
     of your pod depends on these decisions -- you'll see this health displayed on
     each screen of play.
 
-    Once you select an option, you're tied to it, with one exception. To adjust
-    your speed, type 'migrate' at any time.
+    Once you select an option, you're tied to it, with one exception. TO ADJUST
+    YOUR SPEED: type 'migrate' at any time.
 
-    To quit, type 'exit' at any time.
-    To return to this page, type 'help' at any time.
+    TO QUIT: type 'exit' at any time.
+    TO RETURN TO THIS PAGE: type 'help' at any time.
 
 ~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~
 
@@ -104,9 +106,10 @@ def intro_game():
 def input_names():
     print "\n" * 80
     print """
-    You're a humpback whale traveling from the waters near Hawaii back to Alaska, 
-    after giving birth your calf in September. You'll be traveling in a pod consisting 
-    of you, your calf, and two male family members.
+    You're a humpback whale traveling from your mating and calving area near Mexico 
+    back to the feeding grounds near Alaska, after giving birth your calf in September. 
+    You'll be traveling in a pod consisting of you, your calf, and two male family 
+    members.
 
     """
     print PLAYER_ART
@@ -126,12 +129,13 @@ def input_names():
 
 
 # PREPARE FUNCTION: input how long to stay and eat and rest before starting journey
+def prepare():
     print "\n" * 80
     print BAIT_BALL_ART
     print """
 
     You and your pod are migrating north, to abundant feeding grounds. You have
-    spent the winter in the warm waters near Hawaii, where you gave birth to %s
+    spent the winter in the warm waters near Mexico, where you gave birth to %s
     in September. These waters don't have much food, so you have been fasting and 
     living off of your fat stores since you left Alaska several months ago.
 
@@ -178,9 +182,9 @@ def migrate():
         print """
 
     How fast do you want to travel?
-    1 - 1mph
-    2 - 3mph
-    3 - 5mph
+    1 - 3mph
+    2 - 5mph
+    3 - 10mph
     4 - help me decide
 
         """
@@ -190,10 +194,9 @@ def migrate():
         elif speed == "4":
             print """
         
-    Humback whales can travel as fast as 5mph. However, they travel 24 hours
-    per day during their migration and can get fatigued at such high speeds.
-    In ideal conditions during migration, humpbacks usually average between
-    1-2 mph.
+    Humback whales can travel as fast as 15mph, in quick bursts when escaping danger. 
+    However, they travel 24 hours per day during their migration and can get fatigued 
+    at such high speeds. During migration, humpbacks average about 2-3 mph.
 
         """
         else:
@@ -201,20 +204,21 @@ def migrate():
     if speed == "1":
         health_dict["speed_health"] = 5
     elif speed == "2":
-        health_dict["speed_health"] = 2
+        health_dict["speed_health"] = 0
     else:
         health_dict["speed_health"] = -5
     play_game()
 
 
-# MAIN PLAY FUNCTION loops game play: randomly calls new events; loop only breaks with win or death
+# MAIN PLAY FUNCTION loops game play: randomly calls new events, loop only breaks with win or death
 def play_game():
   while True:
     current_health = calculate_health()
-    #if location....
+    # current_location = calculate_location()
+    #if current_location == "Alaska feeding grounds":
       #win()
       #break
-    #elif current_health <= -30
+    #elif current_health <= -30:
     if current_health <= -30:
       death()
       break
@@ -323,23 +327,25 @@ def boat_hazard():
 
 
 
-
 # LOCATION FUNCTION to calculate pod's location
-# def calculate_location(): need agorithm based on time within game
-# combined with hazards/choices and migration map
+# def calculate_location(): need agorithm based on elapsed time within game
+# combined with hazards/choices and speed, overlayed on migration map
 
 
 # DATE FUNCTION to function to calculate date, using elapsed time in game and input start date
 def calculate_date():
-  elapsed_time = (time.time() - start_time)/10
-  return int(elapsed_time)
-# need to pull start date from prepare(); then, need to use elapsed time to decide how much to add
-# >>> from datetime import datetime, timedelta
-# >>> s = '2004/03/30'
-# >>> date = datetime.strptime(s, "%Y/%m/%d")
-# >>> modified_date = date + timedelta(days=1)
-# >>> datetime.strftime(modified_date, "%Y/%m/%d")
-# '2004/03/31'
+  elapsed_time = int((time.time() - start_time)/10)
+  if health_dict["prepare_health"] == 2:
+    starting_date = 'February 15'
+  elif health_dict["prepare_health"] == 5:
+    starting_date = 'March 15'
+  elif health_dict["prepare_health"] == -2:
+    starting_date = 'April 15'
+  else:
+    starting_date = 'May 15'
+  date = datetime.strptime(starting_date, "%B %d")
+  current_date = date + timedelta(days=elapsed_time)
+  return datetime.strftime(current_date, "%B %d")
 
 
 # HEALTH FUNCTION to calculate health, based on speed and hazards
@@ -360,7 +366,12 @@ def calculate_health():
 
     return health_return
 
+    #when health gets too low, one of the whales dies and is removed from dictionary -- NOT player
+    #after death of a whale, health increases slightly to stop all the whales from dying in a row
+    #when all whales dead, you die/lose?
+
 # Possible project expansion: separate health calculator for each whale in the pod
+# HUNGER FUNCTION???
 
 
 
@@ -413,17 +424,22 @@ CALF_ART = """
 
 FAMILY_ART = """
 
-                    :._   _.------------.___
-            __      :__:-'                  '--.      
-     __   ,' .'    .'             ______________'.      
-   /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
-      '._                     .-': .' _.' _.'_.'      
-  ~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
+       ___.------------._   _.: 
+   .--'                  '-:__:      __ 
+ .'______________             '.    '. ',    __  
+  '._-._  '.  '. '.  0          '.____\_  -.' __\      
+     '._'._ '._ '. :'-.                     _.'        
+~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
   """
 
 POD_ART = """
 
-  Image of all 4 whales migrating
+
+           \`''\/''`/   \`''\/''`/    \`''\/''`/
+            \      /     \      /      \      /    |"\/"|
+             |    |       |    |        |    |      \  /
+             /    \       /    \        /    \      /  |
+^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
 
 """
 
