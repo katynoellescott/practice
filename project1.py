@@ -1,20 +1,18 @@
-# Whale Trail by Katy Scott
+# WHALE TRAIL, A CHOOSE YOUR OWN ADVENTURE GAME BY KATY SCOTT
 import random
 import time
 
-# assign game start time, so elapsed time can be used to calculate the date 
-# of the journey in the calculate_date() function
+# Assign game start time, so elapsed time can be used to calculate the date of the journey in the calculate_date() function
 # is this an appropriate use of a global variable, or is there a better way?
 start_time = time.time() 
 
-#create default player names, in case player bypasses names screen accidentally
+# Assign default player names, in case player bypasses names screen accidentally
 names_dict = {"player": "you", "calf":"your calf", "family1":"your brother","family2":"your cousin"}
 
-#create inititial health score
+# Assign initial health score
 health_dict = {"prepare_health":0, "speed_health": 0, "migration_health":0}
 
-#function for all input, which will allow user to use universal commands like
-#'exit' and 'help'
+# INPUT FUNCTION for all player input, which will allow user to use universal commands like 'exit' and 'help'
 def user_input():
     while True:
         user_choice = raw_input("")
@@ -30,7 +28,7 @@ def user_input():
           return user_choice
 
 
-#function to display instructions for play
+# INSTRUCTIONS FUNCTION to display instructions for play
 def instructions():
     print "\n" * 80
     print """
@@ -75,13 +73,12 @@ def instructions():
       intro_game()
     elif next_step == "2":
       play_game()
-#what if they select this option but haven't yet entered their whale names?
     else:
         print "Come back soon!"
         exit()
 
 
-#Title page with whale image and opening player choices (directions, play, quit)
+# TITLE PAGE with whale image and opening player choices (directions, play, quit)
 def intro_game():
     print "\n" * 80
     print WELCOME_ART
@@ -103,8 +100,7 @@ def intro_game():
         exit()
 
 
-# NAMES FUNCTION: input names of player and other members of whale pod; 
-# names defined as global variables b/c used throughout multiple functions and don't change
+# NAMES FUNCTION: input names of player and other members of whale pod
 def input_names():
     print "\n" * 80
     print """
@@ -129,9 +125,7 @@ def input_names():
 
 
 
-# PREPARE FUNCTION: input how long to stay and eat and rest, to build up fat store 
-# for journey and to ensure calf is ready for journey
-def prepare():
+# PREPARE FUNCTION: input how long to stay and eat and rest before starting journey
     print "\n" * 80
     print BAIT_BALL_ART
     print """
@@ -175,8 +169,7 @@ def prepare():
 
 
 
-# MIGRATE FUNCTION: input migration speed; can return and change this option
-# at any time, which changes speed health
+# MIGRATE FUNCTION: input migration speed; can return and change this option at any time, which changes health
 def migrate():
     print "\n" * 80
     print POD_ART
@@ -185,9 +178,9 @@ def migrate():
         print """
 
     How fast do you want to travel?
-    1 - 5mph
+    1 - 1mph
     2 - 3mph
-    3 - 1mph
+    3 - 5mph
     4 - help me decide
 
         """
@@ -210,34 +203,25 @@ def migrate():
     elif speed == "2":
         health_dict["speed_health"] = 2
     else:
-        health_dict["speed_health"] = 2
+        health_dict["speed_health"] = -5
     play_game()
 
 
-# function that loops game play: constant image of whales migrating, with readout of health, speed, location
-# randomly calls new events; loop only breaks with win or death
+# MAIN PLAY FUNCTION loops game play: randomly calls new events; loop only breaks with win or death
 def play_game():
-  while True: #WARNING: CURRENTLY INFINITE LOOP!
-  #loop will only break if you die or win or EXIT() -- need to call input function to listen for exit
-  #use two (or nested) if statements, where first one checks location and health
-  #and breaks before moving on to second if statement
+  while True:
     current_health = calculate_health()
     #if location....
       #win()
       #break
-    #elif health <= -30
+    #elif current_health <= -30
     if current_health <= -30:
       death()
       break
     else:
       random_event = random.randrange(20)
       print "\n" * 80
-      print """
-
-
-  Image of whales migrating
-
-    """
+      print POD_ART
       if random_event == 0:
         health_dict["migration_health"] += boat_hazard()#will this break the loop bc it sends it to a function with a return?
       # elif random_event == 2:
@@ -255,11 +239,11 @@ def play_game():
       else:
         print "Day:", calculate_date()
         print "Health:", current_health
-        print "Location:" #, migration
+        print "Location:" #, calculate_location()
         time.sleep(3)
 
 
-# Function to continue game play after event.
+# Function to continue game play after random event; gives user regular option to exit
 def continue_game():
     while True:
         print "Type '1' to continue."
@@ -268,20 +252,8 @@ def continue_game():
           play_game()
           break
 
-# OTHER POSSIBLE HAZARDS/CHOICES
-# route choices at key points, based on location, based on speed and time passed
-# whalers/harvest
-# starving and illness
-# habitat impacts
 
-#FUNCTIONS FOR VARIOUS CHOICES/HAZARDS:
-#def orca_hazard()
-#def entanglement_hazard()
-#def gyre_hazard()
-#def weather_choice()
-#def feed_choice()
-#def communicate_choice()
-
+# FUNCTIONS FOR VARIOUS CHOICES/HAZARDS:
 def boat_hazard():
   random_boat = random.randrange(2)
   random_whale = random.choice(names_dict.values())
@@ -336,15 +308,28 @@ def boat_hazard():
     continue_game()
     return 5
   
+#def orca_hazard()
+#def entanglement_hazard()
+#def gyre_hazard()
+#def weather_choice()
+#def feed_choice()
+#def communicate_choice()
+
+# OTHER POSSIBLE HAZARDS/CHOICES
+# route choices at key points, based on location, based on speed and time passed
+# whalers/harvest
+# starving and illness
+# habitat impacts
 
 
 
-# function to calculate location
+
+# LOCATION FUNCTION to calculate pod's location
 # def calculate_location(): need agorithm based on time within game
-# combined with hazards/choices
+# combined with hazards/choices and migration map
 
 
-# function to calculate date, using elapsed time in game and input start date
+# DATE FUNCTION to function to calculate date, using elapsed time in game and input start date
 def calculate_date():
   elapsed_time = (time.time() - start_time)/10
   return int(elapsed_time)
@@ -356,7 +341,8 @@ def calculate_date():
 # >>> datetime.strftime(modified_date, "%Y/%m/%d")
 # '2004/03/31'
 
-#function to calculate health, based on speed and hazards
+
+# HEALTH FUNCTION to calculate health, based on speed and hazards
 def calculate_health():
 #need to modify algorithm -- this is just for testing
     health = 5 + health_dict["prepare_health"] + health_dict["speed_health"] + health_dict["migration_health"]
@@ -374,18 +360,18 @@ def calculate_health():
 
     return health_return
 
-    #does each whale need a health calculator, or one for the whole pod and then
-    #randomly select who gets ill, with player being less likely? (Could start with
-    # universal pod health, and change to one per whale if there's time)
+# Possible project expansion: separate health calculator for each whale in the pod
 
 
 
 #WIN SCREEN
-# make it to northern feeding grounds and win --> based on location function?
+# make it to northern feeding grounds and win --> based on location function
 # def win():
-# if statement
+# if statement based on calculate_location()
 #   print exciting win statement
 
+
+# DEATH FUNCTION defines how player can lose
 def death():
   print """
   Image of dead whale.
@@ -393,14 +379,14 @@ def death():
   You died. Sad."""
 
 
-#main function
+#MAIN FUNCTION to call all other functions
 def main(): 
     intro_game()
     prepare()
     migrate()
 
 
-#ASCII art: create global variable and assign ASCII art to these.
+#ASCII art: global constants; listed here to keep code clean
 PLAYER_ART = """
 
                             ','. '. ; : ,','
@@ -436,6 +422,8 @@ FAMILY_ART = """
   """
 
 POD_ART = """
+
+  Image of all 4 whales migrating
 
 """
 
@@ -546,52 +534,6 @@ CAMERA_ART = """
 """
 
 
-
+# Calls the main function, to activate all code
 if __name__ == '__main__':
     main()
-
-
-
-#VISUALS
-#whale traveling through waters at top of every page
-#for new page, clear terminal with print "\n" * 80
-
-
-# humpback whale visuals:
-
-
-  #                           ','. '. ; : ,','
-  #                             '..'.,',..'
-  #                                ';.'  ,'
-  #                                 ;;
-  #                                 ;'
-  #                   :._   _.------------.___
-  #           __      :__:-'                  '--.      
-  #    __   ,' .'    .'             ______________'.      
-  #  /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
-  #     '._                     .-': .' _.' _.'_.'      
-  #        '----'._____________.'_'._:_:_.-'--'         
-  #~^~^~^~^~^~^~^~^~^~^~^~^~ ~^~^~^~^~^~^~^~^~^~^~^~^~ 
-
-
-
-
-
-
-# orca (bad guy) visuals:
-
-
-
-
-#                 O          .
-#              O            ' '
-#                o         '   .
-#              o         .'
-#           __________.-'       '...___
-#        .-'                      ###  '''...__
-#       /   a###                 ##            ''--.._ ______
-#       '.                      #     ########        '   .-'
-#         '-._          ..**********####  ___...---'''\   '
-#             '-._     __________...---'''             \   l
-#                 \   |                                 '._|
-#                  \__;
