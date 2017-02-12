@@ -1,3 +1,18 @@
+# Whale Trail by Katy Scott
+import random
+import time
+
+# assign game start time, so elapsed time can be used to calculate the date 
+# of the journey in the calculate_date() function
+# is this an appropriate use of a global variable, or is there a better way?
+start_time = time.time() 
+
+#create default player names, in case player bypasses names screen accidentally
+names_dict = {"player": "you", "calf":"your calf", "family1":"your brother","family2":"your cousin"}
+
+#create inititial health score
+health_dict = {"prepare_health":0, "speed_health": 0, "migration_health":0}
+
 #function for all input, which will allow user to use universal commands like
 #'exit' and 'help'
 def user_input():
@@ -69,30 +84,7 @@ def instructions():
 #Title page with whale image and opening player choices (directions, play, quit)
 def intro_game():
     print "\n" * 80
-    print """
-    ********************************************************************************
-
-                              
-                               WELCOME TO WHALE TRAIL!
-
-
-                                ','. '. ; : ,','
-                                  '..'.,',..'
-                                     ';.'  ,'
-                                      ;;
-                                      ;'
-                        :._   _.------------.___               .
-                __      :__:-'                  '--.          ":"
-         __   ,' .'    .'             ______________'.      ___:____     |"\/"|  
-       /__ '.-  _\___.'          0  .' .'  .'  _.-_.'     ,'        `.    \  / 
-          '._                     .-': .' _.' _.'_.'      |  O        \___/  |
-      ~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
-      
-
-    ********************************************************************************
-
-
-    """
+    print WELCOME_ART
     while True:
         print "What would you like to do?\n1 - Instructions\n2 - Start playing\n3 - Quit\n"
         intro = user_input()
@@ -104,7 +96,6 @@ def intro_game():
         instructions() 
     elif intro == "2":
         print "Get ready for a WHALE of a good time!"
-        import time
         time.sleep(1) #these two lines of code insert a 1-second pause
         input_names() #run input_names function to begin play
     else:
@@ -122,68 +113,19 @@ def input_names():
     of you, your calf, and two male family members.
 
     """
-    print """
-
-                            ','. '. ; : ,','
-                              '..'.,',..'
-                                 ';.'  ,'
-                                  ;;
-                                  ;'
-                    :._   _.------------.___
-            __      :__:-'                  '--.      
-     __   ,' .'    .'             ______________'.      
-   /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
-      '._                     .-': .' _.' _.'_.'      
-  ~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~     
-  """
+    print PLAYER_ART
     print "Your name: "
-    global player 
-    player = user_input()
-    print """
-       .
-      ":"
-    ___:____     |"\/"|
-  ,'        `.    \  /
-  |  O        \___/  |
-~^~^~^~^~^~^~^~^~^~^~^~^~
-"""
+    names_dict["player"] = user_input()
+    print CALF_ART
     print "Your calf's name: "
-    global calf
-    calf = user_input()
-    print """
-
-                            ','. '. ; : ,','
-                              '..'.,',..'
-                                 ';.'  ,'
-                                  ;;
-                                  ;'
-                    :._   _.------------.___
-            __      :__:-'                  '--.      
-     __   ,' .'    .'             ______________'.      
-   /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
-      '._                     .-': .' _.' _.'_.'      
-  ~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
-  """
+    names_dict["calf"]  = user_input()
+    print FAMILY_ART
     print "Your first family member's name: "
-    global family1
-    family1 = user_input()
-    print """
-
-                            ','. '. ; : ,','
-                              '..'.,',..'
-                                 ';.'  ,'
-                                  ;;
-                                  ;'
-                    :._   _.------------.___
-            __      :__:-'                  '--.      
-     __   ,' .'    .'             ______________'.      
-   /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
-      '._                     .-': .' _.' _.'_.'      
-  ~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
-  """
+    names_dict["family1"]  = user_input()
+    print FAMILY_ART
     print "Your second family member's name: "
-    global family2
-    family2 = user_input()
+    names_dict["family2"]  = user_input()
+    return names_dict
 
 
 
@@ -191,18 +133,15 @@ def input_names():
 # for journey and to ensure calf is ready for journey
 def prepare():
     print "\n" * 80
+    print BAIT_BALL_ART
     print """
-
-<o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  <o)))><
-    <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  
-<o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  <o)))><
 
     You and your pod are migrating north, to abundant feeding grounds. You have
     spent the winter in the warm waters near Hawaii, where you gave birth to %s
     in September. These waters don't have much food, so you have been fasting and 
     living off of your fat stores since you left Alaska several months ago.
 
-    """ % calf
+    """ % names_dict["calf"]
 
     #prompt user to declare a month to begin journey, validate choice, assign choice
     #a health impact, with March being ideal
@@ -222,24 +161,25 @@ def prepare():
     want to leave too late, or you won't have enough fat stores to make your long 
     journey.
 
-          """ % (calf, calf)
+          """ % (names_dict["calf"], names_dict["calf"])
         else:
           print "I don't understand. Please choose 1, 2, 3, 4, or 5."
     if departure == "1":
-        return -2
+        health_dict["prepare_health"] -= 2
     elif departure == "2":
-        return 5
+        health_dict["prepare_health"] += 5
     elif departure == "3":
-        return -2
+        health_dict["prepare_health"] -= 2
     else:
-        return -5
+        health_dict["prepare_health"] -= 5
 
 
 
 # MIGRATE FUNCTION: input migration speed; can return and change this option
-# at any time 
+# at any time, which changes speed health
 def migrate():
     print "\n" * 80
+    print POD_ART
     print "Type 'migrate' to return to this page and change your choice at any time."
     while True:
         print """
@@ -266,54 +206,67 @@ def migrate():
         else:
             print "I don't understand. Please choose 1, 2, 3, or 4."
     if speed == "1":
-        return -5
+        health_dict["speed_health"] = 5
     elif speed == "2":
-        return -2
+        health_dict["speed_health"] = 2
     else:
-        return 2
+        health_dict["speed_health"] = 2
+    play_game()
 
 
 # function that loops game play: constant image of whales migrating, with readout of health, speed, location
-# randomly calls new events; these new events should return to this function after running,
-# to continue the looped game play; loop only breaks with win or death
+# randomly calls new events; loop only breaks with win or death
 def play_game():
-  departure_health = prepare()
-  speed_health = migrate()
-  migration_health = 0
   while True: #WARNING: CURRENTLY INFINITE LOOP!
-  #loop will only break if you die or win or EXIT()
+  #loop will only break if you die or win or EXIT() -- need to call input function to listen for exit
   #use two (or nested) if statements, where first one checks location and health
   #and breaks before moving on to second if statement
-    import random
-    random_event = random.randrange(20)
-    print "\n" * 80
-    print """
-
-
-Image of whales migrating
-
-  """
-    if random_event == 0:
-      migration_health = migration_health + boat_hazard()#will this break the loop bc it sends it to a function with a return?
-    # elif random_event == 2:
-    #   migration_health = migration_health + orca_hazard()
-    # elif random_event == 4:
-    #   migration_health = migration_health + entanglement_hazard()
-    # elif random_event == 6:
-    #   migration_health = migration_health + gyre_hazard()
-    # elif random_event == 8:
-    #   migration_health = migration_health + weather_choice()
-    # elif random_event == 10:
-    #   migration_health = migration_health + feed_choice()
-    # elif random_event == 12:
-    #   migration_health = migration_health + communicate_choice()
+    current_health = calculate_health()
+    #if location....
+      #win()
+      #break
+    #elif health <= -30
+    if current_health <= -30:
+      death()
+      break
     else:
-      print "Day: " #, calculate_date()
-      print "Health:", calculate_health(departure_health, speed_health, migration_health)
-      print "Location:" #, calculate_location()
-      import time #how do I not repeat imports???
-      time.sleep(3) #these two lines of code insert a 3-second pause
+      random_event = random.randrange(20)
+      print "\n" * 80
+      print """
 
+
+  Image of whales migrating
+
+    """
+      if random_event == 0:
+        health_dict["migration_health"] += boat_hazard()#will this break the loop bc it sends it to a function with a return?
+      # elif random_event == 2:
+      #   health_dict["migration_health"] += orca_hazard()
+      # elif random_event == 4:
+      #   health_dict["migration_health"] += entanglement_hazard()
+      # elif random_event == 6:
+      #   health_dict["migration_health"] += gyre_hazard()
+      # elif random_event == 8:
+      #   health_dict["migration_health"] += weather_choice()
+      # elif random_event == 10:
+      #   health_dict["migration_health"] += feed_choice()
+      # elif random_event == 12:
+      #   health_dict["migration_health"] += communicate_choice()
+      else:
+        print "Day:", calculate_date()
+        print "Health:", current_health
+        print "Location:" #, migration
+        time.sleep(3)
+
+
+# Function to continue game play after event.
+def continue_game():
+    while True:
+        print "Type '1' to continue."
+        response = user_input()
+        if response == "1":
+          play_game()
+          break
 
 # OTHER POSSIBLE HAZARDS/CHOICES
 # route choices at key points, based on location, based on speed and time passed
@@ -330,10 +283,10 @@ Image of whales migrating
 #def communicate_choice()
 
 def boat_hazard():
-  import random
   random_boat = random.randrange(2)
-  random_whale = random.choice([player, calf, family1, family2])
+  random_whale = random.choice(names_dict.values())
   while True:
+    print BOAT_ART
     print """
     
     As you're traveling, you see a whale-watching boat ahead.
@@ -350,30 +303,39 @@ def boat_hazard():
       break
     else:
       print "I don't understand. Please choose 1, 2, or 3."
-  from random import choice
   if boat_choice == "1" and random_boat == 0:
-    print "Oh, no! %s collides with the boat and is seriously injured." % random_whale
+    print "Oh, no! %s collides with the boat and is seriously injured." % random_whale #pulls random pod member name
+    continue_game()
     return -10
   elif boat_choice == "1" and random_boat == 1:
+    print CAMERA_ART
     print """
 
     They loved it! Photos of your pod appear on Instagram, and lead thousands 
     of people donating to pro-whale NGOs.
 
+    
+
     """
+    continue_game()
     return 5
   elif boat_choice == "2" and random_boat == 0:
     print "Oh, no! You extend your route, but the current is heavy and there's no food."
+    continue_game()
     return -5
   elif boat_choice == "2" and random_boat == 1:
     print "You discover schools of anchovies on this new route and fill your bellies."
+    continue_game()
     return 10
   elif boat_choice == "3" and random_boat == 0:
     print "Oh, no! %s collides with the boat and is seriously injured." % random_whale
+    continue_game()
     return -10
   else:
     print "You continue and are able to avoid the boat, which changes direction."
+    continue_game()
     return 5
+  
 
 
 
@@ -382,29 +344,30 @@ def boat_hazard():
 # combined with hazards/choices
 
 
-# function to calculate date
-# def calculate_date(): need agorithm based on time within game
-# combined with prepare return and hazards/choices 
-
+# function to calculate date, using elapsed time in game and input start date
+def calculate_date():
+  elapsed_time = (time.time() - start_time)/10
+  return int(elapsed_time)
+# need to pull start date from prepare(); then, need to use elapsed time to decide how much to add
+# >>> from datetime import datetime, timedelta
+# >>> s = '2004/03/30'
+# >>> date = datetime.strptime(s, "%Y/%m/%d")
+# >>> modified_date = date + timedelta(days=1)
+# >>> datetime.strftime(modified_date, "%Y/%m/%d")
+# '2004/03/31'
 
 #function to calculate health, based on speed and hazards
-def calculate_health(departure, speed, migration):
-    #need to repeatedly recalculate this, based on changing user input... use while loop?
-    #how do I recalculate without re-running functions that the user doesn't want? Maybe
-    #two functions are needed -- one to call functions, based on game order and user choices.
-    #a second function to calculate health based on passed variables
-
+def calculate_health():
 #need to modify algorithm -- this is just for testing
-    health = 5 + departure + speed + migration
+    health = 5 + health_dict["prepare_health"] + health_dict["speed_health"] + health_dict["migration_health"]
 
-#need to add threshold for death
-    if health <= -5:
+    if health <= -10:
       health_return = "Very poor"
-    elif health <=0 and health > -5:
+    elif health <=0 and health > -10:
       health_return = "Poor"
-    elif health <=5 and health > 0:
+    elif health <=10 and health > 0:
       health_return = "Fair"
-    elif health <=10 and health > 5:
+    elif health <=20 and health > 10:
       health_return = "Good"
     else:
       health_return = "Excellent"
@@ -416,22 +379,171 @@ def calculate_health(departure, speed, migration):
     # universal pod health, and change to one per whale if there's time)
 
 
+
 #WIN SCREEN
 # make it to northern feeding grounds and win --> based on location function?
 # def win():
 # if statement
 #   print exciting win statement
 
-#DEATH SCREEN
-#health drops too low and you die --> based on health function?
-# def death():
-# if statement
-#   print sad death statement
+def death():
+  print """
+  Image of dead whale.
+
+  You died. Sad."""
+
 
 #main function
 def main(): 
     intro_game()
-    play_game()
+    prepare()
+    migrate()
+
+
+#ASCII art: create global variable and assign ASCII art to these.
+PLAYER_ART = """
+
+                            ','. '. ; : ,','
+                              '..'.,',..'
+                                 ';.'  ,'
+                                  ;;
+                                  ;'
+                    :._   _.------------.___
+            __      :__:-'                  '--.      
+     __   ,' .'    .'             ______________'.      
+   /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
+      '._                     .-': .' _.' _.'_.'      
+  ~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~     
+  """
+
+CALF_ART = """
+       .
+      ":"
+    ___:____     |"\/"|
+  ,'        `.    \  /
+  |  O        \___/  |
+~^~^~^~^~^~^~^~^~^~^~^~^~
+"""
+
+FAMILY_ART = """
+
+                    :._   _.------------.___
+            __      :__:-'                  '--.      
+     __   ,' .'    .'             ______________'.      
+   /__ '.-  _\___.'          0  .' .'  .'  _.-_.'       
+      '._                     .-': .' _.' _.'_.'      
+  ~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
+  """
+
+POD_ART = """
+
+"""
+
+PLAYER_CALF_ART = """
+                                ','. '. ; : ,','
+                                  '..'.,',..'
+                                     ';.'  ,'
+                                      ;;
+                                      ;'
+                        :._   _.------------.___               .
+                __      :__:-'                  '--.          ":"
+         __   ,' .'    .'             ______________'.      ___:____     |"\/"|  
+       /__ '.-  _\___.'          0  .' .'  .'  _.-_.'     ,'        `.    \  / 
+          '._                     .-': .' _.' _.'_.'      |  O        \___/  |
+      ~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
+"""
+
+WELCOME_ART = """
+
+    ********************************************************************************
+
+                              
+                               WELCOME TO WHALE TRAIL!
+
+
+                                ','. '. ; : ,','
+                                  '..'.,',..'
+                                     ';.'  ,'
+                                      ;;
+                                      ;'
+                        :._   _.------------.___               .
+                __      :__:-'                  '--.          ":"
+         __   ,' .'    .'             ______________'.      ___:____     |"\/"|  
+       /__ '.-  _\___.'          0  .' .'  .'  _.-_.'     ,'        `.    \  / 
+          '._                     .-': .' _.' _.'_.'      |  O        \___/  |
+      ~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
+      
+
+    ********************************************************************************
+
+
+    """
+
+
+ORCA_ART = """
+
+    ~                           ~              ~
+       ~~~~     ~          ~~ ~        ~      ~    ~~    
+  ~~             _,-''-.     ~~        .-._       ~  ~~~
+            ,---':::::::\`.            \_::`.,...__    ~ 
+     ~     |::`.:::::::::::`.       ~    )::::::.--'       
+           |:_:::`.::::::::::`-.__~____,'::::(        
+ ~~~~       \```-:::`-.o:::::::::\:::::::::~::\       ~~~
+             )` `` `.::::::::::::|:~~:::::::::|      ~   ~~
+ ~~        ,',' ` `` \::::::::,-/:_:::::::~~:/           
+         ,','/` ,' ` `\::::::|,'   `::~~::::/  ~~        ~
+~       ( (  \_ __,.-' \:-:,-'.__.-':::::::'  ~    ~   
+    ~    \`---''   __..--' `:::~::::::_:-'               
+          `------''      ~~  \::~~:::'               
+       ~~   `--..__  ~   ~   |::_:-'                    ~~~
+   ~ ~~     /:,'   `''---.,--':::\          ~~       ~~
+  ~         ``           (:::::::|  ~~~            ~~    ~
+~~      ~~             ~  \:~~~:::             ~       ~~~
+             ~     ~~~     \:::~::          ~~~     ~
+    ~~           ~~    ~~~  ::::::                     ~~
+          ~~~                \::::   ~~
+                       ~   ~~ `--'
+
+"""
+
+BAIT_BALL_ART = """
+<o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  <o)))><
+    <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  
+<o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  <o)))><
+"""
+
+FISH_ART = """
+
+        <o)))><
+
+"""
+
+BOAT_ART = """
+
+
+                        __/___            
+                  _____/______|           
+         _______/_____\_______\_____     
+         \              < < <       |    
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+"""
+
+CAMERA_ART = """
+
+
+                                    .---.
+                                    |[O]|
+                             _.==._.'''''.______
+                            d __ ___.-''-. _____b
+                            |[__]  /.''''.\ _   |
+                            |     // /''\  \_)  |
+                            |     \  \__/ //    |
+                            |      \`.__.'/     |
+                            \=======`-..-'======/
+                             `-----------------'  
+
+"""
 
 
 
@@ -445,26 +557,7 @@ if __name__ == '__main__':
 #for new page, clear terminal with print "\n" * 80
 
 
-#fish visuals: 
-# <o)))><
-
 # humpback whale visuals:
-#       .
-#       ":"
-#     ___:____     |"\/"|
-#   ,'        `.    \  /
-#   |  O        \___/  |
-# ~^~^~^~^~^~^~^~^~^~^~^~^~
-  # .-------------'```'----....,,__                        _,
-  # |                               `'`'`'`'-.,.__        .'(
-  # |                                             `'--._.'   )
-  # |                                                   `'-.<
-  # \               .-'`'-.                            -.    `\
-  #  \               -.o_.     _                     _,-'`\    |
-  #   ``````''--.._.-=-._    .'  \            _,,--'`      `-._(
-  #     (^^^^^^^^`___    '-. |    \  __,,..--'                 `
-  #      `````````   `'--..___\    |`
-  #                            `-.,'
 
 
   #                           ','. '. ; : ,','
@@ -482,29 +575,12 @@ if __name__ == '__main__':
 
 
 
+
+
+
 # orca (bad guy) visuals:
 
-#     ~                           ~              ~
-#        ~~~~     ~          ~~ ~        ~      ~    ~~    
-#   ~~             _,-''-.     ~~        .-._       ~  ~~~
-#             ,---':::::::\`.            \_::`.,...__    ~ 
-#      ~     |::`.:::::::::::`.       ~    )::::::.--'       
-#            |:_:::`.::::::::::`-.__~____,'::::(        
-#  ~~~~       \```-:::`-.o:::::::::\:::::::::~::\       ~~~
-#              )` `` `.::::::::::::|:~~:::::::::|      ~   ~~
-#  ~~        ,',' ` `` \::::::::,-/:_:::::::~~:/           
-#          ,','/` ,' ` `\::::::|,'   `::~~::::/  ~~        ~
-# ~       ( (  \_ __,.-' \:-:,-'.__.-':::::::'  ~    ~   
-#     ~    \`---''   __..--' `:::~::::::_:-'               
-#           `------''      ~~  \::~~:::'               
-#        ~~   `--..__  ~   ~   |::_:-'                    ~~~
-#    ~ ~~     /:,'   `''---.,--':::\          ~~       ~~
-#   ~         ``           (:::::::|  ~~~            ~~    ~
-# ~~      ~~             ~  \:~~~:::             ~       ~~~
-#              ~     ~~~     \:::~::          ~~~     ~
-#     ~~           ~~    ~~~  ::::::                     ~~
-#           ~~~                \::::   ~~
-#                        ~   ~~ `--'
+
 
 
 #                 O          .
