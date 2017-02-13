@@ -5,13 +5,13 @@ from datetime import datetime, timedelta
 
 # Assign game start time, so elapsed time can be used to calculate the date of the journey in the calculate_date() function
 # is this an appropriate use of a global variable, or is there a better way?
-start_time = time.time() 
+# start_time = time.time() 
 
+# DICTIONARIES to pass player names, health score, and location info
 # Assign default player names, in case player bypasses names screen accidentally
 names_dict = {"player": "you", "calf":"your calf", "family1":"your brother","family2":"your cousin"}
-
-# Assign initial health score
-health_dict = {"prepare_health":0, "speed_health": 0, "migration_health":0}
+health_dict = {"prepare_health":0, "speed_health": 0, "migration_health":0, "game_play_loop":0}
+location_dict = {"game_play_loop":0, "gps":0}
 
 # INPUT FUNCTION for all player input, which will allow user to use universal commands like 'exit' and 'help'
 def user_input():
@@ -213,13 +213,13 @@ def migrate():
 # MAIN PLAY FUNCTION loops game play: randomly calls new events, loop only breaks with win or death
 def play_game():
   while True:
+    location_dict["game_play_loop"] += 1
     current_health = calculate_health()
-    # current_location = calculate_location()
-    #if current_location == "Alaska feeding grounds":
-      #win()
-      #break
-    #elif current_health <= -30:
-    if current_health <= -30:
+    current_location = calculate_location()
+    if current_location == "Alaska feeding grounds":
+      win()
+      break
+    elif current_health <= -30:
       death()
       break
     else:
@@ -243,7 +243,8 @@ def play_game():
       else:
         print "Day:", calculate_date()
         print "Health:", current_health
-        print "Location:" #, calculate_location()
+        print "Miles Traveled:", int(location_dict["gps"])
+        print "Location:" , current_location
         time.sleep(3)
 
 
@@ -328,13 +329,41 @@ def boat_hazard():
 
 
 # LOCATION FUNCTION to calculate pod's location
-# def calculate_location(): need agorithm based on elapsed time within game
-# combined with hazards/choices and speed, overlayed on migration map
+def calculate_location():
+  speed = health_dict["speed_health"]
+
+#use current speed per 8 hours to re-assign miles traveled (b/c each game loop is 8 hours)
+  if speed == "1":
+    location_dict["gps"] += 24
+  elif speed == "2":
+    location_dict["gps"] += 40
+  else:
+    location_dict["gps"] += 80 
+
+#report location based on miles traveled
+  if location_dict["gps"] >= 0 and location_dict["gps"] < 750:
+    return "waters off Baja, Mexico"
+  elif location_dict["gps"] >= 750 and location_dict["gps"] < 1500:
+    return "waters off Southern California"
+  elif location_dict["gps"] >= 1500 and location_dict["gps"] < 2250:
+    return "Monterey Bay"
+  elif location_dict["gps"] >= 2250 and location_dict["gps"] < 3000:
+    return "waters off Northern California"
+  elif location_dict["gps"] >= 3000 and location_dict["gps"] < 3750:
+    return "waters off Oregon"
+  elif location_dict["gps"] >= 3750 and location_dict["gps"] < 4500:
+    return "waters off Washington"
+  elif location_dict["gps"] >= 4500 and location_dict["gps"] < 6000:
+    return "waters off British Columbia, Canada"
+  elif location_dict["gps"] >= 6000:
+    return "waters off Alaska!"
+  else:
+    return "???"
 
 
-# DATE FUNCTION to function to calculate date, using elapsed time in game and input start date
+# DATE FUNCTION to calculate date, using number of game play loops and input start date
 def calculate_date():
-  elapsed_time = int((time.time() - start_time)/10)
+  elapsed_time = (location_dict["game_play_loop"])/3
   if health_dict["prepare_health"] == 2:
     starting_date = 'February 15'
   elif health_dict["prepare_health"] == 5:
@@ -345,12 +374,15 @@ def calculate_date():
     starting_date = 'May 15'
   date = datetime.strptime(starting_date, "%B %d")
   current_date = date + timedelta(days=elapsed_time)
+# need to include current speed in algorithm
   return datetime.strftime(current_date, "%B %d")
 
 
 # HEALTH FUNCTION to calculate health, based on speed and hazards
 def calculate_health():
 #need to modify algorithm -- this is just for testing
+#instead of changing speed health, add to it, like migration health so there's 
+# impact if wrong speed for extended periods of time
     health = 5 + health_dict["prepare_health"] + health_dict["speed_health"] + health_dict["migration_health"]
 
     if health <= -10:
@@ -376,11 +408,17 @@ def calculate_health():
 
 
 #WIN SCREEN
-# make it to northern feeding grounds and win --> based on location function
-# def win():
-# if statement based on calculate_location()
-#   print exciting win statement
+def win():
+  print """
 
+YOU WIN WHALE TRAIL!!!
+
+Image of happy whales and lots of fish.
+
+Hooray! You arrived at your summer feeding grounds! You and your pod will spend the
+next 6 months feeding on the abundant food here before returning to Mexico to breed.
+
+  """
 
 # DEATH FUNCTION defines how player can lose
 def death():
