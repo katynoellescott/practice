@@ -127,7 +127,6 @@ def input_names():
     return names_dict
 
 
-
 # PREPARE FUNCTION: input how long to stay and eat and rest before starting journey
 def prepare():
     print "\n" * 80
@@ -227,17 +226,17 @@ def play_game():
       print "\n" * 80
       print POD_ART
       if random_event == 0:
-        health_dict["migration_health"] += boat_hazard()#will this break the loop bc it sends it to a function with a return?
-      # elif random_event == 2:
-      #   health_dict["migration_health"] += orca_hazard()
-      # elif random_event == 4:
-      #   health_dict["migration_health"] += entanglement_hazard()
+        health_dict["migration_health"] += boat_hazard()
+      elif random_event == 2:
+        health_dict["migration_health"] += orca_hazard()
+      elif random_event == 4:
+        health_dict["migration_health"] += entanglement_hazard()
       # elif random_event == 6:
       #   health_dict["migration_health"] += gyre_hazard()
       # elif random_event == 8:
       #   health_dict["migration_health"] += weather_choice()
-      # elif random_event == 10:
-      #   health_dict["migration_health"] += feed_choice()
+      elif random_event == 10:
+        health_dict["migration_health"] += feed_choice()
       # elif random_event == 12:
       #   health_dict["migration_health"] += communicate_choice()
       else:
@@ -281,6 +280,7 @@ def boat_hazard():
     else:
       print "I don't understand. Please choose 1, 2, or 3."
   if boat_choice == "1" and random_boat == 0:
+    print FAIL_WHALE_ART
     print "Oh, no! %s collides with the boat and is seriously injured." % random_whale #pulls random pod member name
     continue_game()
     return -10
@@ -291,20 +291,21 @@ def boat_hazard():
     They loved it! Photos of your pod appear on Instagram, and lead thousands 
     of people donating to pro-whale NGOs.
 
-    
-
     """
     continue_game()
     return 5
   elif boat_choice == "2" and random_boat == 0:
+    print FAIL_WHALE_ART
     print "Oh, no! You extend your route, but the current is heavy and there's no food."
     continue_game()
     return -5
   elif boat_choice == "2" and random_boat == 1:
-    print "You discover schools of anchovies on this new route and fill your bellies."
+    print BAIT_BALL_ART
+    print "You discover schools of anchovies on this new route and fill your bellies. Yum!"
     continue_game()
     return 10
   elif boat_choice == "3" and random_boat == 0:
+    print FAIL_WHALE_ART
     print "Oh, no! %s collides with the boat and is seriously injured." % random_whale
     continue_game()
     return -10
@@ -312,12 +313,166 @@ def boat_hazard():
     print "You continue and are able to avoid the boat, which changes direction."
     continue_game()
     return 5
-  
-#def orca_hazard()
-#def entanglement_hazard()
+
+
+def orca_hazard():
+  random_orca = random.randrange(2)
+  while True:
+    print ORCA_ART
+    print """
+    
+    As you're traveling, you see a pod of orcas.
+    
+    What do you do?
+
+      1 - Approach the orcas.
+      2 - Make your route longer to avoid the orcas.
+
+      """
+    orca_choice = user_input()
+    if orca_choice == "1" or orca_choice == "2":
+      break
+    else:
+      print "I don't understand. Please choose 1, 2, or 3."
+  if orca_choice == "1":
+    print ORCA_ART
+    print """
+    Oh, no! The orcas attack. They pull %s to the bottom of the ocean by 
+    the tail, and drown the calf. They eat its tongue and move along.
+    """ % names_dict["calf"]
+    #delete calf from dictionary
+    #make more complex with embedded choices here
+    continue_game()
+    return -20
+  elif orca_choice == "2" and random_orca == 0:
+    print FAIL_WHALE_ART
+    print """
+    Oh, no! You extend your route, but the orcas chase you. You must increase 
+    your speed. You get away, but your pod is fatigued and hungry."""
+    feed_choice()
+    return -5
+  else:
+    print "Good thinking! You avoid the orcas and continue safely on your journey."
+    continue_game()
+    return 5
+
+
+def entanglement_hazard():
+  random_entangle = random.randrange(2)
+  random_whale = random.choice(names_dict.values())
+  while True:
+    print ENTANGLE_ART
+    print """
+    
+    Oh, no! While traveling, %s became entangled in a gillnet.
+    What do you do?
+
+      1 - Work as a team to try to remove the net.
+      2 - Continue traveling, and hope the net will fall away.
+
+      """ % random_whale
+    entangle_choice = user_input()
+    if entangle_choice == "1" or entangle_choice == "2" or entangle_choice == "3":
+      break
+    else:
+      print "I don't understand. Please choose 1, 2, or 3."
+  if entangle_choice == "1" and random_entangle == 0:
+    print FAIL_WHALE_ART
+    print "Oh, no! The gillnet became even more entangled, leading to serious injury." 
+    continue_game()
+    return -10
+  elif entangle_choice == "1" and random_entangle == 1:
+    print POD_ART
+    print "The pod managed to remove the net. Good work!"
+    continue_game()
+    return 5
+  elif entangle_choice == "2" and random_entangle == 0:
+    print FAIL_WHALE_ART
+    print "Oh, no! The gillnet became even more entangled, leading to serious injury."
+    continue_game()
+    return -5
+  else:
+    print "You continue the net falls away in a few hours, without injury."
+    continue_game()
+    return 5
+
+
 #def gyre_hazard()
+    # print """
+    
+    # In this part of the journey, you can travel farther out, in the deeper ocean, 
+    # where the route is clearer, but there is less food. Or you can travel closer 
+    # to shore, where there is more food, but there are more people and boats.
+    
+    # What do you do?
+
+    #   1 - Travel in the deeper ocean.
+    #   2 - Travel closer to shore.
+
+    #   """
+
 #def weather_choice()
-#def feed_choice()
+
+
+def feed_choice():
+  random_feed = random.randrange(2)
+  random_whale = random.choice(names_dict.values())
+  while True:
+    print FISH_ART
+    print """
+    
+    Your pod is fatigued and needs food.
+    What do you do?
+
+      1 - Communicate with your pod to work as a team to capture sardines.
+      2 - Split up and hunt independently.
+      3 - Move closer to shore, where there are more schools of smaller fishes.
+
+      """
+    feed_choice = user_input()
+    if feed_choice == "1" or feed_choice == "2" or feed_choice == "3":
+      break
+    else:
+      print "I don't understand. Please choose 1, 2, or 3."
+  if feed_choice == "1":
+    print BAIT_BALL_ART
+    print """
+    
+    Great job! Your pod works together to go underwater and blow bubbles that form 
+    a sort of bubble net, trapping schools of fishes. Then, you take turns feasting on 
+    the trapped food. Your pod is full and happy!
+
+    """
+    continue_game()
+    return 10
+  elif feed_choice == "2" and random_feed == 0:
+    print FAIL_WHALE_ART
+    print """
+    Oh, no! You lose track of %s and the pod must spend hours search to find the 
+    calf. After you're reunited, you're all even more fatigued and hungry.
+
+    """ % names_dict["calf"]
+    continue_game()
+    return -5
+  elif feed_choice == "2" and random_feed == 1:
+    print BAIT_BALL_ART
+    print "You're all able to find and eat krill. Yum!"
+    continue_game()
+    return 5
+  elif feed_choice == "3" and random_feed == 0:
+    print FAIL_WHALE_ART
+    print """
+    Oh, no! Closer to shore, there are more people. %s collides with a boat and 
+    is seriously injured.""" % random_whale
+    continue_game()
+    return -10
+  else:
+    print BAIT_BALL_ART
+    print "Good plan! Closer to shore, you find several schools of sardines to feast upon."
+    continue_game()
+    return 5
+
+
 #def communicate_choice()
 
 # OTHER POSSIBLE HAZARDS/CHOICES
@@ -374,7 +529,6 @@ def calculate_date():
     starting_date = 'May 15'
   date = datetime.strptime(starting_date, "%B %d")
   current_date = date + timedelta(days=elapsed_time)
-# need to include current speed in algorithm
   return datetime.strftime(current_date, "%B %d")
 
 
@@ -383,20 +537,22 @@ def calculate_health():
 #need to modify algorithm -- this is just for testing
 #instead of changing speed health, add to it, like migration health so there's 
 # impact if wrong speed for extended periods of time
-    health = 5 + health_dict["prepare_health"] + health_dict["speed_health"] + health_dict["migration_health"]
+  health = health_dict["prepare_health"] + health_dict["speed_health"] + health_dict["migration_health"]
 
-    if health <= -10:
-      health_return = "Very poor"
-    elif health <=0 and health > -10:
-      health_return = "Poor"
-    elif health <=10 and health > 0:
-      health_return = "Fair"
-    elif health <=20 and health > 10:
-      health_return = "Good"
-    else:
-      health_return = "Excellent"
+  if health <= -20:
+    death()
+  elif health <= -10 and health > -20:
+    health_return = "Very poor"
+  elif health <=0 and health > -10:
+    health_return = "Poor"
+  elif health <=10 and health > 0:
+    health_return = "Fair"
+  elif health <=20 and health > 10:
+    health_return = "Good"
+  else:
+    health_return = "Excellent"
 
-    return health_return
+  return health_return
 
     #when health gets too low, one of the whales dies and is removed from dictionary -- NOT player
     #after death of a whale, health increases slightly to stop all the whales from dying in a row
@@ -419,13 +575,16 @@ Hooray! You arrived at your summer feeding grounds! You and your pod will spend 
 next 6 months feeding on the abundant food here before returning to Mexico to breed.
 
   """
+  print "GAME OVER"
+  exit()
 
-# DEATH FUNCTION defines how player can lose
+
+# DEATH FUNCTION if player loses
 def death():
-  print """
-  Image of dead whale.
-
-  You died. Sad."""
+  print DEAD_POD_ART
+  print "Your pod died of" #, NEED TUPLE OF DEATHS TO PULL FROM RAMDONLY
+  print "GAME OVER"
+  exit()
 
 
 #MAIN FUNCTION to call all other functions
@@ -471,6 +630,18 @@ FAMILY_ART = """
   """
 
 POD_ART = """
+
+         ','. '. ; : ,','             ','. '. ; : ,','                              ','. '. ; : ,','
+          '..'.,',..'                   '..'.,',..'                                   '..'.,',..'
+            ';.'  ,'                      ';.'  ,'                                      ';.'  ,'
+             ;;                            ;;                  .                         ;;
+             ;'                            ;'                 ":"                        ;'
+:._   _.------------.___      :._   _.------------.___      ___:____      :._   _.------------.___        
+~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^  
+
+"""
+
+POD_TAIL_ART = """
 
 
            \`''\/''`/   \`''\/''`/    \`''\/''`/
@@ -522,6 +693,44 @@ WELCOME_ART = """
     """
 
 
+FAIL_WHALE_ART = """
+
+ _|||||||||||||||||\  \____/ 
+||||||| =| ; | | ||||   ||  
+||||_||_||_|_|_|__|||___||
+_____|||||||||||||||/     
+
+"""
+
+#recreate upside down
+DEAD_ART = """
+
+       ___.------------._   _.: 
+   .--'                  '-:__:      __ 
+ .'______________             '.    '. ',    __  
+  '._-._  '.  '.| |.  XX        '.____\_  -.' __\      
+     '._'._ '._ |_| :'-.                   _.'        
+~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
+
+"""
+
+#rereate upside down
+DEAD_POD_ART = """
+
+
+                        :._   _.------------.___               
+                __      :__:-'                  '--.          
+         __   ,' .'    .'             ______________'.      ________     |x\/x|  
+       /__ '.-  _\___.'         XX  .| | .'  .'  _.-_.'   ,'        `.    \  / 
+          '._                     .-'|_|' _.' _.'_.'      |  X        \___/  |
+      ~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
+
+
+
+"""
+
+
+
 ORCA_ART = """
 
     ~                           ~              ~
@@ -556,7 +765,7 @@ BAIT_BALL_ART = """
 
 FISH_ART = """
 
-        <o)))><
+           <o)))><
 
 """
 
@@ -568,6 +777,32 @@ BOAT_ART = """
          _______/_____\_______\_____     
          \              < < <       |    
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+"""
+
+ENTANGLE_ART = """
+
+
+
+                                    _H_
+                                   /___\ 
+                                   \888/
+~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~U~^~^~^~^~^~^~^
+                      ~              |
+      ~                        o     |        ~
+                           o         |
+                              O      |
+                                     |   ~
+                                     #
+                                     #
+                                   #  _#, 
+                                 `#((' \        ~
+                                    ))  \ 
+                                   ((   ))
+                       ~            \  ((
+                                      )) `
+
+
 
 """
 
