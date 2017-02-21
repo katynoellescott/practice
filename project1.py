@@ -447,9 +447,10 @@ def gyre_hazard():
     Oh, no! In the deep ocean, you come across the Pacific gyre -- where the ocean 
     is like a soup of plastic trash. You can't avoid it, so you must swim through
     it. In the gyre, while eating, your pod accidentally eats a lot of tiny plastic
-    pieces mixed in with your prey. %s gets sick.
+    pieces mixed in with your prey. %s dies of plastic ingestion.
 
-    """ % random_whale 
+    """ % names_dict["family1"]
+    del names_dict["family1"]
     continue_game()
     return -10
   elif gyre_choice == "2" and random_gyre == 0:
