@@ -3,135 +3,148 @@ import random
 import time
 from datetime import datetime, timedelta
 
-# Assign game start time, so elapsed time can be used to calculate the date of the journey in the calculate_date() function
-# is this an appropriate use of a global variable, or is there a better way?
-# start_time = time.time() 
-
 # DICTIONARIES to pass player names, health score, and location info
-# Assign default player names, in case player bypasses names screen accidentally
 names_dict = {"player": "you", "calf":"your calf", "family1":"your brother","family2":"your cousin"}
 health_dict = {"prepare_health":0, "speed_health": 0, "migration_health":0, "game_play_loop":0}
 location_dict = {"game_play_loop":0, "gps":0}
+cause_of_death = ("starvation.","plastic ingestion.","illness.","fatigue.","beaching.")
 
-# INPUT FUNCTION for all player input, which will allow user to use universal commands like 'exit' and 'help'
+
 def user_input():
-    while True:
-        user_choice = raw_input("")
-        if user_choice.lower() == 'exit': 
-          exit()
-        elif user_choice.lower() == 'help':
-          intructions()
-        elif user_choice.lower() == 'migrate':
-          migrate()
-        elif user_choice == "":
-         print "Please type your option."
-        else:
-          return user_choice
+  '''
+  Used for all player input throughout game.
+  Allows universal commands like exit and help to be called on any input screen.
+  '''
+  while True:
+    user_choice = raw_input("")
+    if user_choice.lower() == 'exit': 
+      exit()
+    elif user_choice.lower() == 'help':
+      instructions()
+    elif user_choice.lower() == 'migrate':
+      migrate()
+    elif user_choice == "":
+      print "Please type your option."
+    else:
+      return user_choice
+
+def continue_game():
+  '''
+  Prompts user to continue game play after every event.
+  Calls user-input function to give user regular option to exit game.
+  '''
+  while True:
+    print "Type '1' to continue."
+    response = user_input()
+    if response == "1":
+      play_game()
+      break
 
 
-# INSTRUCTIONS FUNCTION to display instructions for play
 def instructions():
-    print "\n" * 80
-    print """
+  '''Displays instructions for play'''
+  print "\n" * 80
+  print """
 
-~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~
+~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~~^~^
 
-    Welcome to Whale Trail, the game where YOU are a migrating humpback whale,
-    making life and death decisions for yourself and your pod.
+  Welcome to Whale Trail, the game where YOU are a migrating humpback whale,
+  making life and death decisions for yourself and your pod.
 
-    Humpback whales migrate from Alaska to Mexico each winter, in one of the longest
-    migrations of any mammal on Earth. In the warm waters of Mexico, the whales breed 
-    and, about 11 months later, return to give birth. Although these waters have less 
-    food, they also have fewer predators, making them safer for newborn calves. 
+  Humpback whales migrate from Alaska to Mexico each winter, in one of the 
+  longest migrations of any mammal on Earth. In the warm waters of Mexico, the 
+  whales breed and, about 11 months later, return to give birth. Although these 
+  waters have less food, they also have fewer predators, making them safer for 
+  newborn calves. 
 
-    In this game, you have just given birth to your calf near Mexico. Now, after 
-    months of fasting, you are about to make the 6,000-mile journey back to the 
-    abundant feeding grounds near Alaska. On your journey, you'll need to find food, 
-    protect your pod and avoid hazards like weather, ocean pollution, boats, and 
-    killer whales.
+  In this game, you have just given birth to your calf near Mexico. Now, after 
+  months of fasting, you are about to make the 6,000-mile journey back to the 
+  abundant feeding grounds near Alaska. On your journey, you'll need to find 
+  food, protect your pod and avoid hazards like weather, ocean pollution, boats, 
+  and killer whales.
 
-    TO PLAY: follow the prompts on each screen to make your next decision. The health
-    of your pod depends on these decisions -- you'll see this health displayed on
-    each screen of play.
+  TO PLAY: follow the prompts on each screen to make your next decision. The 
+  health of your pod depends on these decisions -- you'll see this health 
+  displayed on each screen of play.
 
-    Once you select an option, you're tied to it, with one exception. TO ADJUST
-    YOUR SPEED: type 'migrate' at any time.
+  Once you select an option, you're tied to it, with one exception.
+  TO ADJUST YOUR SPEED: type 'migrate' at any time.
 
-    TO QUIT: type 'exit' at any time.
-    TO RETURN TO THIS PAGE: type 'help' at any time.
+  TO QUIT: type 'exit' at any time.
+  TO RETURN TO THIS PAGE: type 'help' at any time.
 
-~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~
+~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~~^~^
 
     """
 
-    while True:
-        print "What would you like to do?\n1 - Start game from beginning\n2 - Continue play\n3 - Quit\n"
-        next_step = user_input()
-        if next_step == "1" or next_step == "2" or next_step == "3":
-            break
-        else:
-            print "I don't understand. Please choose 1, 2, or 3."    
-    if next_step == "1":
-      intro_game()
-    elif next_step == "2":
-      play_game()
+  while True:
+    print "What would you like to do?\n1 - Continue play\n2 - Quit\n"
+    next_step = user_input()
+    if next_step == "1" or next_step == "2":
+      break
     else:
-        print "Come back soon!"
-        exit()
+      print "I don't understand. Please choose 1 or 2."    
+  if next_step == "1" and location_dict["game_play_loop"] == 0:
+    intro_game()
+  elif next_step == "1" and location_dict["game_play_loop"] > 0:
+    play_game()
+  else:
+    print "Come back soon!"
+    exit()
 
 
-# TITLE PAGE with whale image and opening player choices (directions, play, quit)
 def intro_game():
-    print "\n" * 80
-    print WELCOME_ART
-    while True:
-        print "What would you like to do?\n1 - Instructions\n2 - Start playing\n3 - Quit\n"
-        intro = user_input()
-        if intro == "1" or intro == "2" or intro == "3":
-            break
-        else:
-            print "I don't understand. Please choose 1, 2, or 3."
-    if intro == "1":
-        instructions() 
-    elif intro == "2":
-        print "Get ready for a WHALE of a good time!"
-        time.sleep(1) #these two lines of code insert a 1-second pause
-        input_names() #run input_names function to begin play
+  '''Game title page, with image and opening choices (directions, play, quit)'''
+  print "\n" * 80
+  print WELCOME_ART
+  time.sleep(1)
+  while True:
+    print "What would you like to do?\n1 - Instructions\n2 - Start playing\n3 - Quit\n"
+    intro = user_input()
+    if intro == "1" or intro == "2" or intro == "3":
+      break
     else:
-        print "Come back soon!"
-        exit()
+      print "I don't understand. Please choose 1, 2, or 3."
+  if intro == "1":
+    instructions() 
+  elif intro == "2":
+    print "Get ready for a WHALE of a good time!"
+    time.sleep(1) #these two lines of code insert a 1-second pause
+    input_names() #run input_names function to begin play
+  else:
+    print "Come back soon!"
+    exit()
 
-
-# NAMES FUNCTION: input names of player and other members of whale pod
 def input_names():
-    print "\n" * 80
-    print """
+  '''Prompts user to input names of player and members of pod'''
+  print "\n" * 80
+  print """
     You're a humpback whale traveling from your mating and calving area near Mexico 
     back to your feeding grounds near Alaska, after giving birth your calf in September. 
     You'll be traveling in a pod consisting of you, your calf, and two male family 
     members.
 
     """
-    print PLAYER_ART
-    print "Your name: "
-    names_dict["player"] = user_input()
-    print CALF_ART
-    print "Your calf's name: "
-    names_dict["calf"]  = user_input()
-    print FAMILY_ART
-    print "Your first family member's name: "
-    names_dict["family1"]  = user_input()
-    print FAMILY_ART
-    print "Your second family member's name: "
-    names_dict["family2"]  = user_input()
-    return names_dict
+  print PLAYER_ART
+  print "Your name: "
+  names_dict["player"] = user_input()
+  print CALF_ART
+  print "Your calf's name: "
+  names_dict["calf"]  = user_input()
+  print FAMILY_ART
+  print "Your first family member's name: "
+  names_dict["family1"]  = user_input()
+  print FAMILY_ART
+  print "Your second family member's name: "
+  names_dict["family2"]  = user_input()
+  return names_dict
 
 
-# PREPARE FUNCTION: input how long to stay and eat and rest before starting journey
 def prepare():
-    print "\n" * 80
-    print BAIT_BALL_ART
-    print """
+  '''Prompt player to decide when to leave Mexico and start the journey.'''
+  print "\n" * 80
+  print BAIT_BALL_ART
+  print """
 
     You and your pod are migrating north, to abundant feeding grounds. You have
     spent the winter in the warm waters near Mexico, where you gave birth to %s
@@ -142,13 +155,13 @@ def prepare():
 
     #prompt user to declare a month to begin journey, validate choice, assign choice
     #a health impact, with March being ideal
-    while True:
-        print "When would you like to leave?\n1 - February\n2 - March\n3 - April\n4 - May\n5 - help me decide"
-        departure = user_input()
-        if departure == "1" or departure == "2" or departure == "3" or departure == "4":
-          break
-        elif departure == "5":
-          print """
+  while True:
+    print "When would you like to leave?\n1 - February\n2 - March\n3 - April\n4 - May\n5 - help me decide"
+    departure = user_input()
+    if departure == "1" or departure == "2" or departure == "3" or departure == "4":
+      break
+    elif departure == "5":
+      print """
     
     Before you leave, you need to be sure %s is ready for such a grueling trip. 
     You will need to spend some time weaning and training %s to dive. This usually
@@ -159,26 +172,29 @@ def prepare():
     journey.
 
           """ % (names_dict["calf"], names_dict["calf"])
-        else:
-          print "I don't understand. Please choose 1, 2, 3, 4, or 5."
-    if departure == "1":
-        health_dict["prepare_health"] -= 2
-    elif departure == "2":
-        health_dict["prepare_health"] += 5
-    elif departure == "3":
-        health_dict["prepare_health"] -= 2
     else:
-        health_dict["prepare_health"] -= 5
+      print "I don't understand. Please choose 1, 2, 3, 4, or 5."
+  if departure == "1":
+    health_dict["prepare_health"] -= 5
+  elif departure == "2":
+    health_dict["prepare_health"] += 10
+  elif departure == "3":
+    health_dict["prepare_health"] -= 5
+  else:
+    health_dict["prepare_health"] -= 10
 
 
-
-# MIGRATE FUNCTION: input migration speed; can return and change this option at any time, which changes health
 def migrate():
-    print "\n" * 80
-    print POD_ART
-    print "Type 'migrate' to return to this page and change your choice at any time."
-    while True:
-        print """
+  '''
+  Prompt user to input migration speed.
+  User can change this selection at any time, by recalling this function.
+  Migration speed impacts health, via the calculate_health function.
+  '''
+  print "\n" * 80
+  print POD_ART
+  print "Type 'migrate' to return to this page and change your choice at any time."
+  while True:
+    print """
 
     How fast do you want to travel?
     1 - 3mph
@@ -187,30 +203,34 @@ def migrate():
     4 - help me decide
 
         """
-        speed = user_input()
-        if speed == "1" or speed == "2" or speed == "3":
-            break
-        elif speed == "4":
-            print """
+    speed = user_input()
+    if speed == "1" or speed == "2" or speed == "3":
+      break
+    elif speed == "4":
+      print """
         
-    Humback whales can travel as fast as 15mph, in quick bursts when escaping danger. 
+    Humpback whales can travel as fast as 15mph, in quick bursts when escaping danger. 
     However, they travel 24 hours per day during their migration and can get fatigued 
     at such high speeds. During migration, humpbacks average about 2-3 mph.
 
         """
-        else:
-            print "I don't understand. Please choose 1, 2, 3, or 4."
-    if speed == "1":
-        health_dict["speed_health"] = 5
-    elif speed == "2":
-        health_dict["speed_health"] = 0
     else:
-        health_dict["speed_health"] = -5
-    play_game()
+      print "I don't understand. Please choose 1, 2, 3, or 4."
+  if speed == "1":
+    health_dict["speed_health"] = 0
+  elif speed == "2":
+    health_dict["speed_health"] = -1
+  else:
+    health_dict["speed_health"] = -2
+  play_game()
 
 
-# MAIN PLAY FUNCTION loops game play: randomly calls new events, loop only breaks with win or death
 def play_game():
+  '''
+  Loops game play every 3 seconds; loop only breaks if player wins or loses.
+  Randomly calls new events, requiring the user to make choices. 
+  Calls functions to adjust location, date and health every loop.
+  '''
   while True:
     location_dict["game_play_loop"] += 1
     current_health = calculate_health()
@@ -242,22 +262,11 @@ def play_game():
       else:
         print "Day:", calculate_date()
         print "Health:", current_health
-        print "Miles Traveled:", int(location_dict["gps"])
         print "Location:" , current_location
+        print "Miles Traveled:", int(location_dict["gps"])
         time.sleep(3)
 
 
-# Function to continue game play after random event; gives user regular option to exit
-def continue_game():
-    while True:
-        print "Type '1' to continue."
-        response = user_input()
-        if response == "1":
-          play_game()
-          break
-
-
-# FUNCTIONS FOR VARIOUS CHOICES/HAZARDS:
 def boat_hazard():
   random_boat = random.randrange(2)
   random_whale = random.choice(names_dict.values())
@@ -282,7 +291,7 @@ def boat_hazard():
       print "I don't understand. Please choose 1, 2, or 3."
   if boat_choice == "1" and random_boat == 0:
     print FAIL_WHALE_ART
-    print "Oh, no! %s collides with the boat and is seriously injured." % random_whale #pulls random pod member name
+    print "Oh, no! %s collides with the boat and is seriously injured." % random_whale
     continue_game()
     return -10
   elif boat_choice == "1" and random_boat == 1:
@@ -485,7 +494,7 @@ def weather_choice():
     print FAIL_WHALE_ART
     print """
     
-    Oh, no! You get stuck in the storm surge and %s in the heavy currents.
+    Oh, no! You get stuck in the storm surge and lose %s in the heavy currents.
     Your pod needs to double-back to find the whale. You find her, but she's fatigued and
     hungry after trying to swim against the current.
 
@@ -531,7 +540,7 @@ def weather_choice():
     print """
     
     You take shelter in an inlet, where the storm surge is minimal. While waiting
-    for the storm to pass, you find schools of small fishes and feast!
+    for the storm to pass, you find schools of krill and feast!
 
     """
     continue_game()
@@ -594,9 +603,9 @@ def feed_choice():
     print FAIL_WHALE_ART
     print """
     Oh, no! You lose track of %s and the pod must spend hours searching to find 
-    the calf. After you're reunited, you're all even more fatigued and hungry.
+    the whale. After you're reunited, you're all even more fatigued and hungry.
 
-    """ % names_dict["calf"]
+    """ % random_whale
     continue_game()
     return -5
   elif feed_choice == "2" and random_feed == 1:
@@ -665,20 +674,20 @@ def communicate_choice():
     return 0
 
 
-
-# LOCATION FUNCTION to calculate pod's location
 def calculate_location():
+  '''
+  Calculate the pod's location, based on number of loops of game play and 
+  the input speed.
+  '''
   speed = health_dict["speed_health"]
-
-#use current speed per 8 hours to re-assign miles traveled (b/c each game loop is 8 hours)
+  #use current speed per 8 hours to re-assign miles traveled (b/c each game loop is 8 hours)
   if speed == "1":
     location_dict["gps"] += 24
   elif speed == "2":
     location_dict["gps"] += 40
   else:
     location_dict["gps"] += 80 
-
-#report location based on miles traveled
+  #report location based on miles traveled
   if location_dict["gps"] >= 0 and location_dict["gps"] < 750:
     return "waters off Baja, Mexico"
   elif location_dict["gps"] >= 750 and location_dict["gps"] < 1500:
@@ -693,14 +702,12 @@ def calculate_location():
     return "waters off Washington"
   elif location_dict["gps"] >= 4500 and location_dict["gps"] < 6000:
     return "waters off British Columbia, Canada"
-  elif location_dict["gps"] >= 6000:
-    return "waters off Alaska!"
   else:
-    return "???"#test to ensure this function is working properly
+    return "waters off Alaska!"
 
 
-# DATE FUNCTION to calculate date, using number of game play loops and input start date
 def calculate_date():
+  '''Use the number of game play loops and input start date to calculate date'''
   elapsed_time = (location_dict["game_play_loop"])/3
   if health_dict["prepare_health"] == 2:
     starting_date = 'February 15'
@@ -715,39 +722,36 @@ def calculate_date():
   return datetime.strftime(current_date, "%B %d")
 
 
-# HEALTH FUNCTION to calculate health, based on speed and hazards
 def calculate_health():
-#need to modify algorithm -- this is just for testing
-#instead of changing speed health, add to it, like migration health so there's impact if wrong speed for extended periods of time
-  health = health_dict["prepare_health"] + health_dict["speed_health"] + health_dict["migration_health"]
+  '''
+  Calculate pod's health, based on speed over time (using game loops), the input 
+  month of departure, and any hazards encountered
+  '''
+  health = health_dict["prepare_health"] + (health_dict["speed_health"] * location_dict["game_play_loop"]) + health_dict["migration_health"]
 
-  if health <= -20:
+  if health <= -40:
     death()
-  elif health <= -10 and health > -20:
+  elif health <= -20 and health > -40:
     health_return = "Very poor"
-  elif health <=0 and health > -10:
+  elif health <=0 and health > -20:
     health_return = "Poor"
-  elif health <=10 and health > 0:
+  elif health <=20 and health > 0:
     health_return = "Fair"
-  elif health <=20 and health > 10:
+  elif health <=40 and health > 20:
     health_return = "Good"
   else:
     health_return = "Excellent"
 
   return health_return
 
-    #when health gets too low, one of the whales dies and is removed from dictionary -- NOT player
-    #after death of a whale, health increases slightly to stop all the whales from dying in a row
-    #when all whales dead, you die/lose?
 
-
-#WIN SCREEN
 def win():
+  print BAIT_BALL_ART
+  print PLAYER_CALF_ART
+  print BAIT_BALL_ART
   print """
 
-YOU WIN WHALE TRAIL!!!
-
-Image of happy whales and lots of fish.
+**************************** YOU WIN WHALE TRAIL!!! ****************************
 
 Hooray! You arrived at your summer feeding grounds! You and your pod will spend the
 next 6 months feeding on the abundant food here before returning to Mexico to breed.
@@ -757,15 +761,14 @@ next 6 months feeding on the abundant food here before returning to Mexico to br
   exit()
 
 
-# DEATH FUNCTION if player loses
 def death():
   print DEAD_POD_ART
-  print "Your pod died of" #, NEED TUPLE OF DEATHS TO PULL FROM RAMDONLY
+  print "Your pod died of", random.choice(cause_of_death)
   print "GAME OVER"
   exit()
 
 
-#MAIN FUNCTION to call all other functions
+
 def main(): 
     intro_game()
     prepare()
@@ -773,14 +776,11 @@ def main():
 
 
 # POSSIBLE PROJECT EXPANSIONS:
-  # separate health calculator for each whale in the pod
+  # separate health calculator for each whale in the pod, so each can die based on hazards
   # hunger function and read-out
   # more choices embedded in hazards, based on result of choice
   # route choices at key points, based on location, based on speed and time passed
-  # whalers/harvest
-  # starving and illness
-  # habitat impacts
-
+  # more hazards: whalers/harvest; starving and illness; habitat impacts
 
 
 #ASCII art: global constants; listed here to keep code clean
@@ -820,13 +820,13 @@ FAMILY_ART = """
 
 POD_ART = """
 
-         ','. '. ; : ,','             ','. '. ; : ,','                              ','. '. ; : ,','
-          '..'.,',..'                   '..'.,',..'                                   '..'.,',..'
-            ';.'  ,'                      ';.'  ,'                                      ';.'  ,'
-             ;;                            ;;                  .                         ;;
-             ;'                            ;'                 ":"                        ;'
-:._   _.------------.___      :._   _.------------.___      ___:____      :._   _.------------.___        
-~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^  
+         ','. '. ; : ,','             ','. '. ; : ,','                          
+          '..'.,',..'                   '..'.,',..'                             
+            ';.'  ,'                      ';.'  ,'                              
+             ;;                            ;;                  .                
+             ;'                            ;'                 ":"               
+:._   _.------------.___      :._   _.------------.___      ___:____      :._   
+~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^
 
 """
 
@@ -837,7 +837,7 @@ POD_TAIL_ART = """
             \      /     \      /      \      /    |"\/"|
              |    |       |    |        |    |      \  /
              /    \       /    \        /    \      /  |
-^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
+^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^
 
 """
 
@@ -857,17 +857,17 @@ PLAYER_CALF_ART = """
 
 COMM_ART = """
 
-                            ','. '. ; : ,','
-                              '..'.,',..'
-                                 ';.'  ,'
-                                  ;;
-                                  ;'
-                    :._   _.------------.___               ___.------------._   _.: 
-            __      :__:-'                  '--.       .--'                  '-:__:      __ 
-     __   ,' .'    .'             ______________'.   .'______________             '.    '. ',    __    
-   /__ '.-  _\___.'          0  .' .'  .'  _.-_.'     '._-._  '.  '. '.  0          '.____\_  -.' __\      
-      '._                     .-': .' _.' _.'_.'         '._'._ '._ '. :'-.                     _.'        
-  ~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~ 
+                          ','. '. ; : ,','
+                            '..'.,',..'
+                               ';.'  ,'
+                                ;;
+                                ;'
+                  :._   _.------------.___               ___.------------._   _.:
+          __      :__:-'                  '--.       .--'                  '-:__:
+   __   ,' .'    .'             ______________'.   .'______________             '
+ /__ '.-  _\___.'          0  .' .'  .'  _.-_.'     '._-._  '.  '. '.  0         
+    '._                     .-': .' _.' _.'_.'         '._'._ '._ '. :'-.        
+~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
 
 
 """
@@ -882,7 +882,7 @@ WELCOME_ART = """
             __      _| |__   __ _| | ___     | |_ _ __ __ _ _| |  | |
             \ \ /\ / / '_ \ / _` | |/ _ \    | __| '__/ _` | | |  |_|
              \ V  V /| | | | (_| | |  __/    | |_| | | (_| | | |   _
-              \_/\_/ |_| |_|\__,_|_|\___|     \__|_|  \__,_|_|_|  |_|
+              \_/\_/ |_| |_|\__,_|_|\___|     \__|_|  \__,_|_|_|  (_)
 
 
 
@@ -896,10 +896,10 @@ WELCOME_ART = """
          __   ,' .'    .'             ______________'.      ___:____     |"\/"|  
        /__ '.-  _\___.'          0  .' .'  .'  _.-_.'     ,'        `.    \  / 
           '._                     .-': .' _.' _.'_.'      |  O        \___/  |
-      ~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~
+      ~^~^~^~^~^~^~^~^~^~^~^~^~~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^~^
       
 
-    ********************************************************************************
+  ********************************************************************************
 
 
     """
@@ -970,9 +970,9 @@ ORCA_ART = """
 """
 
 BAIT_BALL_ART = """
-<o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  <o)))><
+<o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  
     <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  
-<o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  <o)))><
+<o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><   <o)))><  <o)))><  
 """
 
 FISH_ART = """
@@ -1071,6 +1071,5 @@ CAMERA_ART = """
 """
 
 
-# Calls the main function, to activate all code
 if __name__ == '__main__':
     main()
