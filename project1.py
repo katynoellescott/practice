@@ -247,18 +247,25 @@ def play_game():
       print POD_ART
       if random_event == 0:
         health_dict["migration_health"] += boat_hazard()
+        continue_game()
       elif random_event == 2:
         health_dict["migration_health"] += orca_hazard()
+        continue_game()
       elif random_event == 4:
         health_dict["migration_health"] += entanglement_hazard()
+        continue_game()
       elif random_event == 6:
         health_dict["migration_health"] += gyre_hazard()
+        continue_game()
       elif random_event == 8:
         health_dict["migration_health"] += weather_choice()
+        continue_game()
       elif random_event == 10:
         health_dict["migration_health"] += feed_choice()
+        continue_game()
       elif random_event == 12:
         health_dict["migration_health"] += communicate_choice()
+        continue_game()
       else:
         print "Day:", calculate_date()
         print "Health:", current_health
@@ -292,7 +299,6 @@ def boat_hazard():
   if boat_choice == "1" and random_boat == 0:
     print FAIL_WHALE_ART
     print "Oh, no! %s collides with the boat and is seriously injured." % random_whale
-    continue_game()
     return -10
   elif boat_choice == "1" and random_boat == 1:
     print CAMERA_ART
@@ -302,26 +308,21 @@ def boat_hazard():
     of people donating to pro-whale NGOs.
 
     """
-    continue_game()
     return 5
   elif boat_choice == "2" and random_boat == 0:
     print FAIL_WHALE_ART
     print "Oh, no! You extend your route, but the current is heavy and there's no food."
-    continue_game()
     return -5
   elif boat_choice == "2" and random_boat == 1:
     print BAIT_BALL_ART
     print "You discover schools of anchovies on this new route and fill your bellies. Yum!"
-    continue_game()
     return 10
   elif boat_choice == "3" and random_boat == 0:
     print FAIL_WHALE_ART
     print "Oh, no! %s collides with the boat and is seriously injured." % random_whale
-    continue_game()
     return -10
   else:
     print "You continue and are able to avoid the boat, which changes direction."
-    continue_game()
     return 5
 
 
@@ -354,7 +355,6 @@ def orca_hazard():
       the tail, and drown the calf. They eat its tongue and move along.
       """ % names_dict["calf"]
       del names_dict["calf"]
-      continue_game()
       return -20
     else:
       print """
@@ -362,7 +362,6 @@ def orca_hazard():
       serious injury.
 
       """ % random_whale
-      continue_game()
       return -20
   elif orca_choice == "2" and random_orca == 0:
     print FAIL_WHALE_ART
@@ -373,7 +372,6 @@ def orca_hazard():
     return -5
   else:
     print "Good thinking! You avoid the orcas and continue safely on your journey."
-    continue_game()
     return 5
 
 
@@ -400,22 +398,18 @@ def entanglement_hazard():
   if entangle_choice == "1" and random_entangle == 0:
     print FAIL_WHALE_ART
     print "Oh, no! The gillnet became even more entangled, leading to serious injury." 
-    continue_game()
     return -10
   elif entangle_choice == "1" and random_entangle == 1:
     print POD_ART
     print "The pod managed to remove the net. Good work!"
-    continue_game()
     return 5
   elif entangle_choice == "2" and random_entangle == 0:
     print FAIL_WHALE_ART
     print "Oh, no! The gillnet became even more entangled, leading to serious injury."
-    continue_game()
     return -5
   else:
     print FAMILY_ART
     print "You continue and the net falls away in a few hours, without injury."
-    continue_game()
     return 5
 
 
@@ -451,17 +445,14 @@ def gyre_hazard():
 
     """ % names_dict["family1"]
     del names_dict["family1"]
-    continue_game()
     return -10
   elif gyre_choice == "2" and random_gyre == 0:
     print BOAT_ART
     print "Oh, no! Closer to shore, a boat runs into %s, seriously injuring the whale." % random_whale
-    continue_game()
     return -5
   else:
     print BAIT_BALL_ART
     print "Closer to shore, you come across schools of anchovies. Yum!"
-    continue_game()
     return 5
     
 
@@ -489,7 +480,6 @@ def weather_choice():
   if weather_choice == "1" and random_weather == 0:
     print POD_TAIL_ART
     print "The storm surge passes without a problem, and you continue on your way."
-    continue_game()
     return 3
   elif weather_choice == "1" and random_weather == 1:
     print FAIL_WHALE_ART
@@ -500,7 +490,6 @@ def weather_choice():
     hungry after trying to swim against the current.
 
     """ % random_whale
-    continue_game()
     return -10
   elif weather_choice == "2" and random_weather == 0:
     print FAIL_WHALE_ART
@@ -511,7 +500,6 @@ def weather_choice():
     you're able to escape the surge.
 
     """
-    continue_game()
     return -5
   elif weather_choice == "2" and random_weather == 1:
     print BAIT_BALL_ART
@@ -521,7 +509,6 @@ def weather_choice():
     passes. Then, you continue on your route.
 
     """
-    continue_game()
     return 5
   elif weather_choice == "3" and random_weather == 0:
     print FAIL_WHALE_ART
@@ -533,8 +520,6 @@ def weather_choice():
 
     """ % random_whale
 #if possible, kill this random_whale and remove from dictionary
-
-    continue_game()
     return -10
   elif weather_choice == "3" and random_weather == 1:
     print BAIT_BALL_ART
@@ -544,7 +529,6 @@ def weather_choice():
     for the storm to pass, you find schools of krill and feast!
 
     """
-    continue_game()
     return 5
   elif weather_choice == "4" and random_weather == 0:
     print FAIL_WHALE_ART
@@ -554,7 +538,6 @@ def weather_choice():
     You succeed, but it the pod is tired and %s is getting dangerously thin.
 
     """ % random_whale
-    continue_game()
     return -5
   else:
     print POD_ART
@@ -564,7 +547,6 @@ def weather_choice():
     than expected.
     
     """
-    continue_game()
     return 5
 
 
@@ -598,7 +580,6 @@ def feed_choice():
     the trapped food. Your pod is full and happy!
 
     """
-    continue_game()
     return 10
   elif feed_choice == "2" and random_feed == 0:
     print FAIL_WHALE_ART
@@ -607,24 +588,20 @@ def feed_choice():
     the whale. After you're reunited, you're all even more fatigued and hungry.
 
     """ % random_whale
-    continue_game()
     return -5
   elif feed_choice == "2" and random_feed == 1:
     print BAIT_BALL_ART
     print "You're all able to find and eat krill. Yum!"
-    continue_game()
     return 5
   elif feed_choice == "3" and random_feed == 0:
     print FAIL_WHALE_ART
     print """
     Oh, no! Closer to shore, there are more people. %s collides with a boat and 
     is seriously injured.""" % random_whale
-    continue_game()
     return -10
   else:
     print BAIT_BALL_ART
     print "Good plan! Closer to shore, you find several schools of sardines to feast upon."
-    continue_game()
     return 5
 
 
@@ -656,7 +633,6 @@ def communicate_choice():
     pod to trap schools of small fishes and feast on them. Everyone is full and happy!
 
     """
-    continue_game()
     return 10
   elif comm_choice == "2" and random_communicate == 0:
     print FAIL_WHALE_ART
@@ -666,12 +642,10 @@ def communicate_choice():
     underwater rocks. %s gets scratched pretty badly.
 
     """ % random_whale
-    continue_game()
     return -10
   else:
     print POD_ART
     print "You successfully avoid the pod and continue on your journey."
-    continue_game()
     return 0
 
 
