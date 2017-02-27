@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 # DICTIONARIES to pass player names, health score, and location info
 names_dict = {"player": "you", "calf":"your calf", "family1":"your brother","family2":"your cousin"}
-health_dict = {"prepare_health":0, "speed_health": 0, "migration_health":0, "game_play_loop":0}
+health_dict = {"prepare_health":0, "speed_health": 0, "migration_health":0, "game_play_loop":1}
 location_dict = {"game_play_loop":0, "gps":0}
 cause_of_death = ("starvation.","plastic ingestion.","illness.","fatigue.","beaching.")
 
@@ -37,8 +37,7 @@ def continue_game():
     print "Type '1' to continue."
     response = user_input()
     if response == "1":
-      play_game()
-      break
+      return
 
 
 def instructions():
@@ -175,7 +174,7 @@ def prepare():
     else:
       print "I don't understand. Please choose 1, 2, 3, 4, or 5."
   if departure == "1":
-    health_dict["prepare_health"] -= 5
+    health_dict["prepare_health"] += 2
   elif departure == "2":
     health_dict["prepare_health"] += 10
   elif departure == "3":
@@ -231,6 +230,13 @@ def play_game():
   Randomly calls new events, requiring the user to make choices. 
   Calls functions to adjust location, date and health every loop.
   '''
+  print "\n" * 80
+  print POD_ART
+  print "Day:", calculate_date()
+  print "Health:", calculate_health()
+  print "Location:" , calculate_location()
+  print "Miles Traveled:", int(location_dict["gps"])
+  time.sleep(3)
   while True:
     location_dict["game_play_loop"] += 1
     current_health = calculate_health()
@@ -349,7 +355,7 @@ def orca_hazard():
       print "I don't understand. Please choose 1 or 2."
   if orca_choice == "1":
     print ORCA_ART
-    if "calf" in names_dict == True:
+    if "calf" in names_dict:
       print """
       Oh, no! The orcas attack. They pull %s to the bottom of the ocean by 
       the tail, and drown the calf. They eat its tongue and move along.
@@ -686,9 +692,9 @@ def calculate_date():
   elapsed_time = (location_dict["game_play_loop"])/3
   if health_dict["prepare_health"] == 2:
     starting_date = 'February 15'
-  elif health_dict["prepare_health"] == 5:
+  elif health_dict["prepare_health"] == 10:
     starting_date = 'March 15'
-  elif health_dict["prepare_health"] == -2:
+  elif health_dict["prepare_health"] == -5:
     starting_date = 'April 15'
   else:
     starting_date = 'May 15'
